@@ -5,26 +5,24 @@ $params = array_merge(
     require __DIR__ . '/params.php',
     require __DIR__ . '/params-local.php'
 );
-$db = require __DIR__ . '/db.php';
 
 return [
-    'id' => 'app-backend',
+    'id' => 'app-greencloud',
     'basePath' => dirname(__DIR__),
-    'controllerNamespace' => 'backend\controllers',
     'bootstrap' => ['log'],
-    'modules' => [],
+    'controllerNamespace' => 'greencloud\controllers',
     'components' => [
         'request' => [
-            'csrfParam' => '_csrf-backend',
+            'csrfParam' => '_csrf-greencloud',
         ],
         'user' => [
             'identityClass' => 'common\models\User',
             'enableAutoLogin' => true,
-            'identityCookie' => ['name' => '_identity-backend', 'httpOnly' => true],
+            'identityCookie' => ['name' => '_identity-greencloud', 'httpOnly' => true],
         ],
         'session' => [
-            // this is the name of the session cookie used for login on the backend
-            'name' => 'advanced-backend',
+            // this is the name of the session cookie used for login on the greencloud
+            'name' => 'advanced-greencloud',
         ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
@@ -46,10 +44,6 @@ return [
             ],
         ],
         */
-        'db' => $db,
-    ],
-    'aliases' => [  
-        '@libs' => '@app/libs'
     ],
     'params' => $params,
 ];
