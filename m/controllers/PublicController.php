@@ -4,6 +4,7 @@ namespace m\controllers;
 use Yii;
 use yii\web\Controller;
 use \Curl\Curl;
+use libs\MInfo;
 
 
 class PublicController extends Controller
@@ -22,9 +23,10 @@ class PublicController extends Controller
         $get = Yii::$app->request->get();
         if(!array_key_exists('code', $get)){//#第一步：用户同意授权，获取code
             $redirectUrl = urlencode('http://m.api.ghchotel.com/index.php?r=/public/login-by-wechat');
-            $state = urlencode('http://local.www.judanongye.com/index.html');
-            $url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid='. Yii::$app->params['appId'] .'&redirect_uri='. $redirectUrl .'&response_type=code&scope=snsapi_userinfo&state='. isset($get['state'])?$get['state']:$state .'#wechat_redirect';
-            $this->redirect($url);
+            $state = isset($get['state'])?urlencode($get['state']):urlencode('http://local.www.judanongye.com/index.html');
+            $url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid='. Yii::$app->params['appId'] .'&redirect_uri='. $redirectUrl .'&response_type=code&scope=snsapi_userinfo&state='. $state .'#wechat_redirect';
+	//P($url);            
+$this->redirect($url);
         }else{//#第二步：通过code换取网页授权access_token
             // P($get);
             $url = 'https://api.weixin.qq.com/sns/oauth2/access_token?appid='. Yii::$app->params['appId'] .'&secret='. Yii::$app->params['appSecret'] .'&code='. $get['code'] .'&grant_type=authorization_code';
