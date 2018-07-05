@@ -3,6 +3,7 @@ namespace m\controllers;
 
 use Yii;
 use yii\web\Controller;
+use \Curl\Curl;
 
 
 class PublicController extends Controller
@@ -29,24 +30,33 @@ class PublicController extends Controller
         }else{//#第二步：通过code换取网页授权access_token
             // P($get);
             $url = 'https://api.weixin.qq.com/sns/oauth2/access_token?appid='. $this->appId .'&secret='. $this->appSecret .'&code='. $get['code'] .'&grant_type=authorization_code';
-            $curl = json_decode(Curl::get($url), true);
-            if(!array_key_exists('errcode', $curl)){//#第四步：拉取用户信息(需scope为 snsapi_userinfo)
-                // P($curl);
-                $access_token = $curl['access_token'];
-                $openid = $curl['openid'];
+        $curl = new Curl();    
+	$access = json_decode($curl->get($url), true);
+	//echo '<pre>';
+	//print_r($access);
+	//echo '</pre>';
+            if(!array_key_exists('errcode', $access)){//#第四步：拉取用户信息(需scope为 snsapi_userinfo)
+                //Tools::P($curl);
+                $access_token = $access['access_token'];
+                $openid = $access['openid'];
                 $url = 'https://api.weixin.qq.com/sns/userinfo?access_token='. $access_token .'&openid='. $openid .'&lang=zh_CN';
-                $curl = json_decode(Curl::get($url), true);
-                // P($curl);
+                $userinfo = json_decode($curl->get($url), true);
+                //Tools::P($curl);
+		echo '<pre>';
+		print_r($userinfo);
+		echo '</pre>';
 
             	/*查询数据库，如果没有此ID，插入数据*/
                 // echo $openid;
-        		$usersModel = new Users;
-	            if($usersModel->login($openid, $curl)){
+        	//	$usersModel = new Users;
+	        //    if($usersModel->login($openid, $curl)){
                     // P('OK');
-                    $this->redirect(['index/redirect']);
-                }
+                //    $this->redirect(['index/redirect']);
+                //}
                 Yii::$app->end();
-            }
+            }else{
+		echo $access['errmsg'];
+		}
         }
     }
 
