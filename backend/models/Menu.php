@@ -30,7 +30,6 @@ class Menu extends \yii\db\ActiveRecord
         ];
     }
 
-
     /*
     取出树形分类
     */
@@ -40,7 +39,6 @@ class Menu extends \yii\db\ActiveRecord
         $menuList = self::setTreeList($menuList);
         return $menuList;
     }
-
     /*
     递归函数
     返回一个 商品分类 树列表
@@ -55,12 +53,18 @@ class Menu extends \yii\db\ActiveRecord
 
         for($i=0; $i<count($arr); $i++){
             $arr[$i]["level"] = $level;
-            $total = self::getNumById($arr, $arr[$i]["id"]);//此ID下有多少条数据
+            $hasTotal = self::getHasNumById($arr, $arr[$i]["id"]);//此ID下有多少条数据(不包含隐藏的菜单)
+            $endTotal = self::getEndNumById($arr, $arr[$i]["id"]);//此ID下有多少条数据(包含隐藏的菜单)
             if($arr[$i]["parentid"] == $parentid){
-                if($total){//如果下面有子栏目
+                if($hasTotal){//如果下面有子菜单(不包含隐藏的菜单)
                     $arr[$i]["has"] = true;
                 }else{
                     $arr[$i]["has"] = false;
+                }
+                if($endTotal){//如果下面有子菜单(包含隐藏的菜单)
+                    $arr[$i]["end"] = true;
+                }else{
+                    $arr[$i]["end"] = false;
                 }
                 array_push($list, $arr[$i]);
                 self::setTreeList($arr, $arr[$i]["id"]);
@@ -69,22 +73,71 @@ class Menu extends \yii\db\ActiveRecord
         $level--;
         return $list;
     }
-
     /*
-    为递归函数服务 能够确定前面的符号
-    查看父id为 $parentid 的 结果有多少个
+    为递归函数服务
+    查看父id为 $parentid 的 结果有多少个(不包含隐藏的菜单)
     $arr        匹配的数组
     $parentid   匹配的父ID
     */
-    private static function getNumById($arr, $parentid)
+    private static function getHasNumById($arr, $parentid)
     {
         $num = 0;
         foreach($arr as $k => $v){
-            if($v["parentid"] == $parentid){
+            if(($v["parentid"] == $parentid) && $v["display"]){
                 $num++;
             }
         }
         return $num;
+    }
+    /*
+    为递归函数服务
+    查看父id为 $parentid 的 结果有多少个(不包含隐藏的菜单)
+    $arr        匹配的数组
+    $parentid   匹配的父ID
+    */
+    private static function getEndNumById($arr, $parentid)
+    {
+        $num = 0;
+        foreach($arr as $k => $v){
+            if(($v["parentid"] == $parentid)){
+                $num++;
+            }
+        }
+        return $num;
+    }
+
+
+
+    //------------------VUE TREE(因为目录结构不一样，VUE TREE子菜单是children包含的，所以不能通用上面的getTreeList结构)-----------------
+    /*
+    取出树形分类
+    */
+    public static function getVueTreeList()
+    {
+        $menuList = self::find()->select(['id', 'name as label', 'parentid'])->asArray()->all();
+        $menuList = self::setVueTreeList($menuList);
+        return $menuList;
+    }
+    /*
+    递归函数
+    返回一个 商品分类 树列表
+    $arr        需要处理的数组
+    $parentid   父ID
+    */
+    private static function setVueTreeList($arr, $parentid=0)
+    {
+        $list = array();
+        $j = 0;
+
+        for($i=0; $i<count($arr); $i++){
+            if($arr[$i]["parentid"] == $parentid){
+                array_push($list, $arr[$i]);
+                // $list[$j]['children'] = array();
+                $list[$j]['children'] = self::setVueTreeList($arr, $arr[$i]["id"]);
+                $j++;
+            }
+        }
+        return $list;
     }
     
 }

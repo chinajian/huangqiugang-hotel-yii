@@ -9,8 +9,9 @@ $params = array_merge(
 return [
     'id' => 'app-greencloud',
     'basePath' => dirname(__DIR__),
-    'bootstrap' => ['log'],
     'controllerNamespace' => 'greencloud\controllers',
+    'bootstrap' => ['log'],
+    'modules' => [],
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-greencloud',
@@ -44,6 +45,9 @@ return [
             ],
         ],
         */
+    ],
+    'aliases' => [  
+        '@libs' => '@app/libs'
     ],
     'params' => $params,
 ];
