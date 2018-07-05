@@ -17,7 +17,7 @@ class BasicController extends Controller
         // MInfo::setLoginInfo('零度 火焰');//存入登录信息
         /*验证登录*/
         if(!MInfo::getIsLogin()){
-            $url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid='. Yii::$app->params['appId'] .'&redirect_uri='. $redirectUrl .'&response_type=code&scope=snsapi_userinfo&state=888#wechat_redirect';
+            $url = 'http://m.api.ghchotel.com/index.php?r=/public/login-by-wechat';
             echo Tools::showRes(10405, '请登录系统', $url);
             Yii::$app->end();
         }
