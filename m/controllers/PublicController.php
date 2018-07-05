@@ -7,6 +7,10 @@ use yii\web\Controller;
 
 class PublicController extends Controller
 {
+	private $appId = 'wxd1bbfb1cd92a2ff5';
+    private $appSecret = 'c93a80cb6746631a4ab3020abcce5fd0';
+
+    
 	/*默认路由方法*/
     public function actionIndex()
     {
@@ -19,7 +23,7 @@ class PublicController extends Controller
     {
         $get = Yii::$app->request->get();
         if(!array_key_exists('code', $get)){//#第一步：用户同意授权，获取code
-            $redirectUrl = urlencode('http://shop.judanongye.com/wapshop/basic/login-by-wechat.html');
+            $redirectUrl = urlencode('http://m.api.ghchotel.com/index.php?r=/public/login-by-wechat');
             $url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid='. $this->appId .'&redirect_uri='. $redirectUrl .'&response_type=code&scope=snsapi_userinfo&state=888#wechat_redirect';
             $this->redirect($url);
         }else{//#第二步：通过code换取网页授权access_token
