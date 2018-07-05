@@ -14,4 +14,18 @@ $config = yii\helpers\ArrayHelper::merge(
     require __DIR__ . '/../config/main-local.php'
 );
 
+/*打印*/
+if(!function_exists('P')){
+    function P($arr, $die = true)
+    {
+        echo "<pre>";
+        print_r($arr);
+        // var_dump($arr);
+        echo "</pre>";
+        if($die){
+        	die;
+        }
+    }
+}
+
 (new yii\web\Application($config))->run();

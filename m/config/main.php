@@ -46,5 +46,8 @@ return [
         ],
         */
     ],
+    'aliases' => [  
+        '@libs' => '@app/libs'
+    ],
     'params' => $params,
 ];
