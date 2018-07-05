@@ -13,7 +13,9 @@ class BasicController extends Controller
 
 	public function beforeAction($action)
     {
-        header('Access-Control-Allow-Origin:*');
+        header('Access-Control-Allow-Credentials:true');
+        header('Access-Control-Allow-Origin:http://local.www.judanongye.com');
+        header('Access-Control-Allow-Methods:POST,GET');
         // MInfo::setLoginInfo('零度 火焰');//存入登录信息
         /*验证登录*/
         if(!MInfo::getIsLogin()){

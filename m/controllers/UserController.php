@@ -14,8 +14,7 @@ class UserController extends BasicController
      */
     public function actionUser()
     {
-    	header('Access-Control-Allow-Origin:*');
-        return MInfo::getLoginName($access['nickname']);;
+        return MInfo::getLoginName();
     }
 
     

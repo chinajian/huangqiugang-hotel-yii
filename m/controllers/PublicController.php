@@ -25,8 +25,8 @@ class PublicController extends Controller
             $redirectUrl = urlencode('http://m.api.ghchotel.com/index.php?r=/public/login-by-wechat');
             $state = isset($get['state'])?urlencode($get['state']):urlencode('http://local.www.judanongye.com/index.html');
             $url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid='. Yii::$app->params['appId'] .'&redirect_uri='. $redirectUrl .'&response_type=code&scope=snsapi_userinfo&state='. $state .'#wechat_redirect';
-	//P($url);            
-$this->redirect($url);
+            //P($url);            
+            $this->redirect($url);
         }else{//#第二步：通过code换取网页授权access_token
             // P($get);
             $url = 'https://api.weixin.qq.com/sns/oauth2/access_token?appid='. Yii::$app->params['appId'] .'&secret='. Yii::$app->params['appSecret'] .'&code='. $get['code'] .'&grant_type=authorization_code';
@@ -40,7 +40,7 @@ $this->redirect($url);
                 $userinfo = json_decode($curl->get($url), true);
     			// P($userinfo);
 
-                MInfo::setLoginInfo($access['nickname']);//存入登录信息
+                MInfo::setLoginInfo($userinfo['nickname']);//存入登录信息
                 // return Tools::showRes();//登录成功
                 $this->redirect($get['state']);
 
