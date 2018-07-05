@@ -19,6 +19,7 @@ class PublicController extends Controller
     /*微信登录*/
     public function actionLoginByWechat()
     {
+        header('Access-Control-Allow-Origin:*');
         $get = Yii::$app->request->get();
         if(!array_key_exists('code', $get)){//#第一步：用户同意授权，获取code
             $redirectUrl = urlencode('http://m.api.ghchotel.com/index.php?r=/public/login-by-wechat');
