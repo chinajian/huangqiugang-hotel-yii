@@ -17,7 +17,7 @@ class BasicController extends Controller
         header('Access-Control-Allow-Origin:http://local.www.judanongye.com');
         header('Access-Control-Allow-Methods:POST,GET');
 
-        MInfo::setLoginInfo(1, $data['wechat_nickname']);//存入登录信息
+        // MInfo::setLoginInfo(1, $data['wechat_nickname']);//存入登录信息
 
         /*验证登录*/
         if(!MInfo::getIsLogin()){
