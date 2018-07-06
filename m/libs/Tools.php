@@ -14,9 +14,9 @@ class Tools
             'msg' => $msg,
         );
 
-        if(!empty($data)){
-            $res['data'] = $data;
-        }
+        // if(!empty($data)){
+        //     $res['data'] = $data;
+        // }
         return json_encode($res, JSON_UNESCAPED_UNICODE);
     }
 

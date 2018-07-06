@@ -3,7 +3,7 @@ namespace m\controllers;
 
 use Yii;
 use yii\web\Controller;
-use app\models\Users;
+use app\models\User;
 use \Curl\Curl;
 use libs\MInfo;
 
@@ -27,9 +27,9 @@ class PublicController extends Controller
         //     'headimgurl' => 'http://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLmtjiaJlQy9E2rc4nSwnrG7jNLsXcRKte4picCKPibLYtp4VwvBp7hxQG6946JibZqMHXoGVbRWkpx7Q/132',
         //     'privilege' => Array()
         // );
-        // $Users = new Users;
+        // $userModel = new User;
         // $openid = $userinfo['openid'];
-        // if($Users->login($openid, $userinfo)){
+        // if($userModel->login($openid, $userinfo)){
         //     $this->redirect($get['state']);
         // }
     }
@@ -64,8 +64,17 @@ class PublicController extends Controller
 
             	/*查询数据库，如果没有此ID，插入数据*/
     			// echo $openid;
-    			$Users = new Users;
-    			if($Users->login($openid, $userinfo)){
+    			$userModel = new User;
+                $data['User']['wechat_openid'] = isset($userinfo['openid'])?$userinfo['openid']:'';
+                $data['User']['wechat_nickname'] = isset($userinfo['nickname'])?urlencode($userinfo['nickname']):'';
+                $data['User']['wechat_headimgurl'] = isset($userinfo['headimgurl'])？$userinfo['headimgurl']:'';
+                $data['User']['wechat_sex'] = isset($userinfo['sex'])?$userinfo['sex']:'';
+                $data['User']['wechat_country'] = isset($userinfo['country'])?$userinfo['country']:'';
+                $data['User']['wechat_province'] = isset($userinfo['province'])?$userinfo['province']:'';
+                $data['User']['wechat_city'] = isset($userinfo['city'])?$userinfo['city']:'';
+                $data['User']['regby'] = 3;//3-通过微信注册
+                $data['User']['reg_time'] = time();
+    			if($userModel->login($data)){
     				$this->redirect($get['state']);
     			}
             }else{

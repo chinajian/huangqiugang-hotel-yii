@@ -40,16 +40,29 @@ class MInfo
     }
 
 
-    /*取出登录名*/
-    public static function getLoginName()
+    /*取出登录ID*/
+    public static function getUserid()
     {
     	self::setMode();
     	if(self::$mode == 'seesion'){
 	    	$session = Yii::$app->session;
-	    	if(isset($session['m']['wechat_nickname'])){
-	            return urldecode($session['m']['wechat_nickname']);
+	    	if(isset($session['m']['user_id'])){
+	            return urldecode($session['m']['user_id']);
 	        };
     	}
+        return "";
+    }
+
+    /*取出登录名*/
+    public static function getWechatNickname()
+    {
+        self::setMode();
+        if(self::$mode == 'seesion'){
+            $session = Yii::$app->session;
+            if(isset($session['m']['wechat_nickname'])){
+                return urldecode($session['m']['wechat_nickname']);
+            };
+        }
         return "";
     }
 
