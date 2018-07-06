@@ -47,7 +47,7 @@ class MInfo
     	if(self::$mode == 'seesion'){
 	    	$session = Yii::$app->session;
 	    	if(isset($session['m']['wechat_nickname'])){
-	            return $session['m']['wechat_nickname'];
+	            return urldecode($session['m']['wechat_nickname']);
 	        };
     	}
         return "";

@@ -16,7 +16,9 @@ class BasicController extends Controller
         header('Access-Control-Allow-Credentials:true');
         header('Access-Control-Allow-Origin:http://local.www.judanongye.com');
         header('Access-Control-Allow-Methods:POST,GET');
-        // MInfo::setLoginInfo('零度 火焰');//存入登录信息
+
+        MInfo::setLoginInfo(1, $data['wechat_nickname']);//存入登录信息
+
         /*验证登录*/
         if(!MInfo::getIsLogin()){
             $url = 'http://m.api.ghchotel.com/index.php?r=/public/login-by-wechat';

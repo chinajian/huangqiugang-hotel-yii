@@ -54,7 +54,7 @@ class Users extends \yii\db\ActiveRecord
         if($this->load($data) and $this->validate()){
             if($this->save(false)){
                 $user_id = $this->getPrimaryKey();
-                MInfo::setLoginInfo($user_id, $data['wechat_nickname']);//存入登录信息
+                MInfo::setLoginInfo($user_id, $data['Users']['wechat_nickname']);//存入登录信息
                 return true;
             }
         }
