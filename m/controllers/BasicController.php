@@ -22,7 +22,7 @@ class BasicController extends Controller
         /*验证登录*/
         if(!MInfo::getIsLogin()){
             $url = 'http://m.api.ghchotel.com/index.php?r=/public/login-by-wechat';
-            echo Tools::showRes(10405, '请登录系统', $url);
+            echo Tools::showRes(10405, '请登录系统'.MInfo::getIsLogin(), $url);
             Yii::$app->end();
         }
         // $session = Yii::$app->session;

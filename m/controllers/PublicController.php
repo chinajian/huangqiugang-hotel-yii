@@ -84,8 +84,7 @@ class PublicController extends Controller
                 $data['User']['regby'] = 3;//3-通过微信注册
                 $data['User']['reg_time'] = time();
     			if($userModel->login($data)){
-    				// $this->redirect($get['state']);
-                    echo MInfo::getIsLogin();
+    				$this->redirect($get['state']);
     			}
             }else{
     			echo $access['errmsg'];
