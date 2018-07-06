@@ -16,21 +16,30 @@ class PublicController extends Controller
     {
         echo '默认路由方法';
 
-        // $userinfo = array(
-        //     'openid' => 'ovx7C1LGqg1CjMhtNkMXmOd0VbLo',
-        //     'nickname' => '零度 火焰',
-        //     'sex' => '1',
-        //     'language' => 'zh_CN',
-        //     'city' => '常州',
-        //     'province' => '江苏',
-        //     'country' => '中国',
-        //     'headimgurl' => 'http://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLmtjiaJlQy9E2rc4nSwnrG7jNLsXcRKte4picCKPibLYtp4VwvBp7hxQG6946JibZqMHXoGVbRWkpx7Q/132',
-        //     'privilege' => Array()
-        // );
+        $userinfo = array(
+            'openid' => 'ovx7C1LGqg1CjMhtNkMXmOd0VbLo',
+            'nickname' => '零度 火焰',
+            'sex' => '1',
+            'language' => 'zh_CN',
+            'city' => '常州',
+            'province' => '江苏',
+            'country' => '中国',
+            'headimgurl' => 'http://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLmtjiaJlQy9E2rc4nSwnrG7jNLsXcRKte4picCKPibLYtp4VwvBp7hxQG6946JibZqMHXoGVbRWkpx7Q/132',
+            'privilege' => Array()
+        );
         // $userModel = new User;
-        // $openid = $userinfo['openid'];
-        // if($userModel->login($openid, $userinfo)){
-        //     $this->redirect($get['state']);
+        // $data['User']['wechat_openid'] = isset($userinfo['openid'])?$userinfo['openid']:'';
+        // $data['User']['wechat_nickname'] = isset($userinfo['nickname'])?urlencode($userinfo['nickname']):'';
+        // $data['User']['wechat_headimgurl'] = isset($userinfo['headimgurl'])?$userinfo['headimgurl']:'';
+        // $data['User']['wechat_sex'] = isset($userinfo['sex'])?$userinfo['sex']:'';
+        // $data['User']['wechat_country'] = isset($userinfo['country'])?$userinfo['country']:'';
+        // $data['User']['wechat_province'] = isset($userinfo['province'])?$userinfo['province']:'';
+        // $data['User']['wechat_city'] = isset($userinfo['city'])?$userinfo['city']:'';
+        // $data['User']['regby'] = 3;//3-通过微信注册
+        // $data['User']['reg_time'] = time();
+        // // P($data);
+        // if($userModel->login($data)){
+        //     // $this->redirect($get['state']);
         // }
     }
 
@@ -67,7 +76,7 @@ class PublicController extends Controller
     			$userModel = new User;
                 $data['User']['wechat_openid'] = isset($userinfo['openid'])?$userinfo['openid']:'';
                 $data['User']['wechat_nickname'] = isset($userinfo['nickname'])?urlencode($userinfo['nickname']):'';
-                $data['User']['wechat_headimgurl'] = isset($userinfo['headimgurl'])？$userinfo['headimgurl']:'';
+                $data['User']['wechat_headimgurl'] = isset($userinfo['headimgurl'])?$userinfo['headimgurl']:'';
                 $data['User']['wechat_sex'] = isset($userinfo['sex'])?$userinfo['sex']:'';
                 $data['User']['wechat_country'] = isset($userinfo['country'])?$userinfo['country']:'';
                 $data['User']['wechat_province'] = isset($userinfo['province'])?$userinfo['province']:'';

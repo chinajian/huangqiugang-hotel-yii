@@ -41,8 +41,9 @@ class User extends \yii\db\ActiveRecord
     $data   如果是已经关注的账号，可以返回头像等数据，如果没有关注，$data是错误信息
     $regby      3-通过微信注册
     */
-    public function saveUser($data, $user_id)
+    public function saveUser($data, $user_id = 0)
     {
+        // P($data);
         if($this->load($data) and $this->validate()){
             if($user_id != 0 && is_numeric($user_id)){//编辑
                 $user = self::find()->where('user_id = :uid', [':uid' => $user_id])->one();
@@ -73,7 +74,7 @@ class User extends \yii\db\ActiveRecord
     {
         $user = self::find()->where(['wechat_openid' => $openid])->one();
         // P($user);
-        if(empty($user) && (isset($data['regby']) && $data['regby'] == 3)){//没有找到此会员，并且是微信过来的，需要增加一个会员
+        if(empty($user) && (isset($data['User']['regby']) && $data['User']['regby'] == 3)){//没有找到此会员，并且是微信过来的，需要增加一个会员
             /*新增会员*/
             if($this->saveUser($data)){
                 return true;
