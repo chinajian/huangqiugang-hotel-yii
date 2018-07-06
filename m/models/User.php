@@ -72,7 +72,7 @@ class User extends \yii\db\ActiveRecord
     */
     public function login($data)
     {
-        $user = self::find()->where(['wechat_openid' => $openid])->one();
+        $user = self::find()->where(['wechat_openid' => $data['User']['openid']])->one();
         // P($user);
         if(empty($user) && (isset($data['User']['regby']) && $data['User']['regby'] == 3)){//没有找到此会员，并且是微信过来的，需要增加一个会员
             /*新增会员*/
