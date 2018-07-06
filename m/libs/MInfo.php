@@ -15,7 +15,7 @@ class MInfo
     }
 
 	/*保存登录信息*/
-    public static function setLoginInfo($loginName)
+    public static function setLoginInfo($user_id, $wechat_nickname)
     {
     	self::setMode();
         $lifetime = self::$lifetime;
@@ -23,7 +23,8 @@ class MInfo
 	        $session = Yii::$app->session;
 	        session_set_cookie_params($lifetime);
 	        $session['m'] = [
-	            'username' => $loginName,
+                'user_id' => $user_id,
+	            'wechat_nickname' => $wechat_nickname,
 	            'isLogin' => 1,
 	        ];
     	}
@@ -45,8 +46,8 @@ class MInfo
     	self::setMode();
     	if(self::$mode == 'seesion'){
 	    	$session = Yii::$app->session;
-	    	if(isset($session['m']['username'])){
-	            return $session['m']['username'];
+	    	if(isset($session['m']['wechat_nickname'])){
+	            return $session['m']['wechat_nickname'];
 	        };
     	}
         return "";

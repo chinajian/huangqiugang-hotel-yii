@@ -5,6 +5,7 @@ $params = array_merge(
     require __DIR__ . '/params.php',
     require __DIR__ . '/params-local.php'
 );
+$db = require __DIR__ . '/db.php';
 
 return [
     'id' => 'app-m',
@@ -45,6 +46,7 @@ return [
             ],
         ],
         */
+        'db' => $db,
     ],
     'aliases' => [  
         '@libs' => '@app/libs'

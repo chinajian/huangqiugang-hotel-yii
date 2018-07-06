@@ -3,6 +3,7 @@ namespace m\controllers;
 
 use Yii;
 use yii\web\Controller;
+use app\models\Users;
 use \Curl\Curl;
 use libs\MInfo;
 
@@ -14,6 +15,23 @@ class PublicController extends Controller
     public function actionIndex()
     {
         echo '默认路由方法';
+
+        // $userinfo = array(
+        //     'openid' => 'ovx7C1LGqg1CjMhtNkMXmOd0VbLo',
+        //     'nickname' => '零度 火焰',
+        //     'sex' => '1',
+        //     'language' => 'zh_CN',
+        //     'city' => '常州',
+        //     'province' => '江苏',
+        //     'country' => '中国',
+        //     'headimgurl' => 'http://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLmtjiaJlQy9E2rc4nSwnrG7jNLsXcRKte4picCKPibLYtp4VwvBp7hxQG6946JibZqMHXoGVbRWkpx7Q/132',
+        //     'privilege' => Array()
+        // );
+        // $Users = new Users;
+        // $openid = $userinfo['openid'];
+        // if($Users->login($openid, $userinfo)){
+        //     $this->redirect($get['state']);
+        // }
     }
 
 
@@ -40,17 +58,16 @@ class PublicController extends Controller
                 $userinfo = json_decode($curl->get($url), true);
     			// P($userinfo);
 
-                MInfo::setLoginInfo($userinfo['nickname']);//存入登录信息
+                // MInfo::setLoginInfo($userinfo['nickname']);//存入登录信息
                 // return Tools::showRes();//登录成功
-                $this->redirect($get['state']);
+                // $this->redirect($get['state']);
 
             	/*查询数据库，如果没有此ID，插入数据*/
     			// echo $openid;
-    			// $usersModel = new Users;
-    			// if($usersModel->login($openid, $curl)){
-    			// 	P('OK');
-    			// 	$this->redirect(['index/redirect']);
-    			// }
+    			$Users = new Users;
+    			if($Users->login($openid, $userinfo)){
+    				$this->redirect($get['state']);
+    			}
             }else{
     			echo $access['errmsg'];
     		}
