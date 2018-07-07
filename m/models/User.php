@@ -49,8 +49,9 @@ class User extends \yii\db\ActiveRecord
                 $user = self::find()->where('user_id = :uid', [':uid' => $user_id])->one();
                 if(empty($user)){//没有找到对应记录
                    return false; 
-                }
-                $user->user_name = isset($data['user_name'])?$data['user_name']:'';
+                };
+                // P($user);
+                $user->user_name = isset($data['User']['user_name'])?$data['User']['user_name']:'';
                 if($user->save(false)){
                     return true;
                 };
