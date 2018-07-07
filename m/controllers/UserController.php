@@ -27,7 +27,6 @@ class UserController extends BasicController
             //     )
             // );
             // P($post);
-            $user_id = MInfo::getUserid();
             // echo $user_id;
             $userModel = new User;
             if($userModel->saveUser($post, $user_id)){
@@ -48,6 +47,36 @@ class UserController extends BasicController
         return Tools::showRes(0, $user);
     }
 
+
+    /*微信账号 绑定 手机号*/
+    public function actionBinding()
+    {
+        $user_id = MInfo::getUserid();
+        // if(Yii::$app->request->isPost){
+        if(1){
+            $post = Yii::$app->request->post();
+            $post = array(
+                'User' => array(
+                    'user_name' => 'jiang',
+                    'phone' => '13915028703',
+                )
+            );
+            P($post);
+            echo $user_id;
+            $userModel = new User;
+            if($userModel->saveUser($post, $user_id)){
+                return Tools::showRes();
+                Yii::$app->end();
+            }else{
+                if($userModel->hasErrors()){
+                    return showRes(10100, $userModel->getErrors());
+                }else{
+                    return showRes(-1, '失败');
+                }
+            }
+            return;
+        }
+    }
     
 
 }
