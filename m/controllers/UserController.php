@@ -20,23 +20,23 @@ class UserController extends BasicController
 
         /*如果有数据，进行修改*/
         if(Yii::$app->request->isPost){
+        // if(1){
             $post = Yii::$app->request->post();
             // $post = array(
             //     'User' => array(
-            //         'user_name' => 'jiang',
+            //         'user_name' => '电信',
             //     )
             // );
             // P($post);
-            // echo $user_id;
             $userModel = new User;
-            if($userModel->saveUser($post, $user_id)){
+            if($userModel->modUser($post, $user_id)){
                 return Tools::showRes();
                 Yii::$app->end();
             }else{
                 if($userModel->hasErrors()){
-                    return showRes(10100, $userModel->getErrors());
+                    return Tools::showRes(10100, $userModel->getErrors());
                 }else{
-                    return showRes(-1, '失败');
+                    return Tools::showRes(-1, '失败');
                 }
             }
             return;
@@ -52,26 +52,25 @@ class UserController extends BasicController
     public function actionBinding()
     {
         $user_id = MInfo::getUserid();
-        // if(Yii::$app->request->isPost){
-        if(1){
+        if(Yii::$app->request->isPost){
+        // if(1){
             $post = Yii::$app->request->post();
             $post = array(
                 'User' => array(
-                    'user_name' => 'jiang',
                     'phone' => '13915028703',
+                    'password' => '123456',
                 )
             );
-            P($post);
-            echo $user_id;
+            // P($post);
             $userModel = new User;
-            if($userModel->saveUser($post, $user_id)){
+            if($userModel->modUser($post, $user_id, 'binding')){
                 return Tools::showRes();
                 Yii::$app->end();
             }else{
                 if($userModel->hasErrors()){
-                    return showRes(10100, $userModel->getErrors());
+                    return Tools::showRes(10100, $userModel->getErrors());
                 }else{
-                    return showRes(-1, '失败');
+                    return Tools::showRes(-1, '失败');
                 }
             }
             return;

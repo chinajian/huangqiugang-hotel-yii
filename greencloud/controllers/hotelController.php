@@ -9,6 +9,14 @@ use libs\GreencloudInfo;
 
 class HotelController extends BasicController
 {
+    // private $hotelGroupId;
+
+    public function init()
+    {
+        // $curl = new Curl();
+    }
+
+
 	/*1-查询酒店信息*/
 	public function actionHotels()
     {
@@ -24,7 +32,8 @@ class HotelController extends BasicController
 		if ($curl->error) {
 		    echo 'Error: ' . $curl->errorCode . ': ' . $curl->errorMessage . "\n";
 		} else {
-		    Tools::p($curl->response);
+		    Tools::p(json_decode($curl->response));
+            // return $curl->response;
 		}
     }
 

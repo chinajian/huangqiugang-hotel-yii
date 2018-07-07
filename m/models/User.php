@@ -38,7 +38,7 @@ class User extends \yii\db\ActiveRecord
 
     /*
     添加会员
-    $data   如果是已经关注的账号，可以返回头像等数据，如果没有关注，$data是错误信息
+    $data   提交的数据
     */
     public function addUser($data)
     {
@@ -56,19 +56,32 @@ class User extends \yii\db\ActiveRecord
 
     /*
     修改会员
-    $data   如果是已经关注的账号，可以返回头像等数据，如果没有关注，$data是错误信息
+    $data       提交的数据
+    $user_id    user_id
+    $flag       场景
     */
-    public function modUser($data, $user_id = 0)
+    public function modUser($data, $user_id = 0, $flag = '')
     {
         // P($data);
         if($user_id != 0 && is_numeric($user_id)){
+            if($flag == 'binding'){
+                $this->scenario = 'binding';
+            }
             if($this->load($data) and $this->validate()){
                 $user = self::find()->where('user_id = :uid', [':uid' => $user_id])->one();
                 if(empty($user)){//没有找到对应记录
                    return false; 
                 };
                 // P($user);
-                $user->user_name = isset($data['User']['user_name'])?$data['User']['user_name']:'';
+                if(isset($data['User']['user_name']) and !empty($data['User']['user_name'])){
+                    $user->user_name = $data['User']['user_name'];
+                }
+                if(isset($data['User']['phone']) and !empty($data['User']['phone'])){
+                    $user->phone = $data['User']['phone'];
+                }
+                if(isset($data['User']['password']) and !empty($data['User']['password'])){
+                    $user->password = md5($data['User']['password']);
+                }
                 if($user->save(false)){
                     return true;
                 };
