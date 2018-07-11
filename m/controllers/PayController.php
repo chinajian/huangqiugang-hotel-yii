@@ -5,7 +5,7 @@ use Yii;
 use yii\web\Controller;
 use app\models\User;
 use app\models\OrderInfo;
-use app\models\PayLog;
+// use app\models\PayLog;
 use yii\helpers\Html;
 use libs\MInfo;
 
@@ -18,42 +18,6 @@ class PayController extends Controller
     /*订单支付*/
     public function actionPayOrder()
     {
-        header('Access-Control-Allow-Origin:*');
-        $uid = WapshopInfo::getUserId();
-        $post = Yii::$app->request->post();
-        // $post = array(
-        //     'id' => 37,//订单ID
-        //     'pay_id' => 3//支付ID
-        // );
-        // P($post);
-
-        $id = (int)(isset($post['id'])?$post['id']:0);
-        if(!$id){
-            return showRes2(300, '参数有误！');
-            Yii::$app->end();
-        }
-
-        /*支付方式*/
-        if(!isset($post['pay_id']) or empty($post['pay_id']) or !in_array($post['pay_id'], [1, 3])){
-            return showRes2(302, '支付参数有误！');
-            Yii::$app->end();
-        }else{
-            $pay_id = (int)$post['pay_id'];
-        }
-        if($pay_id == 3){//如果是微信支付，返回微信支付相关的信息jsApiParameters
-            $orderInfo = OrderInfo::find()->select(['order_id', 'order_sn', 'pay_status', 'pay_id', 'pay_name', 'order_amount', 'money_paid'])->where(['order_id'=>$id])->one();
-            return $this->getJsApiParameters($orderInfo['order_amount'], $orderInfo['order_sn']);
-        }
-
-
-        $orderInfo = new OrderInfo;
-        $res = $orderInfo->payOrder($id, $pay_id);
-        if($res === true){
-            return showRes2(200, '支付成功！');
-            Yii::$app->end();
-        }else{
-            return $res;
-        }
     }
 
     /*
@@ -64,48 +28,6 @@ class PayController extends Controller
     */
     private function getJsApiParameters($money, $ordersn='', $flag = 1)
     {
-        require_once "../component/WxpayAPI/lib/WxPay.Api.php";
-        require_once "../component/WxpayAPI/example/WxPay.JsApiPay.php";
-        require_once '../component/WxpayAPI/example/log.php';
-        
-        $money = (int)($money*100);//转换成分
-        if(empty($ordersn)){
-            $ordersn = \WxPayConfig::MCHID.date("YmdHis");
-        }
-
-        //初始化日志
-        $logHandler= new \CLogFileHandler("../component/WxpayAPI/logs/".date('Y-m-d').'.log');
-        $log = \Log::Init($logHandler, 15);
-
-        //①、获取用户openid
-        $tools = new \JsApiPay();
-        // $openId = $tools->GetOpenid();
-        $openId = WapshopInfo::getOpenid();
-        // echo $openId;
-
-        //②、统一下单
-        $input = new \WxPayUnifiedOrder();
-        $input->SetBody("郎溪巨大生态农业-商品购买");//商品描述
-        // $input->SetAttach("test");
-        $input->SetOut_trade_no($ordersn);//商户订单号
-        $input->SetTotal_fee($money);//支付金额
-        $input->SetTime_start(date("YmdHis"));//发起时间
-        $input->SetTime_expire(date("YmdHis", time() + 600));//失效时间
-        // $input->SetGoods_tag("test");
-        if($flag == 1){
-            $input->SetNotify_url("http://shop.judanongye.com/wapshop/pay/backnotify-buygoods.html");
-        }else{
-            $input->SetNotify_url("http://shop.judanongye.com/wapshop/pay/backnotify-recharge.html");
-        }
-        $input->SetTrade_type("JSAPI");
-        $input->SetOpenid($openId);
-
-        $order = \WxPayApi::unifiedOrder($input);
-
-        $jsApiParameters = $tools->GetJsApiParameters($order);
-
-
-        return $jsApiParameters; 
     }
 
     /*
@@ -114,39 +36,6 @@ class PayController extends Controller
     */
     public function actionBacknotifyBuygoods()
     {
-        //获取通知的数据  
-        $postStr = file_get_contents("php://input");
-        $postObj = simplexml_load_string($postStr, 'SimpleXMLElement', LIBXML_NOCDATA);
-
-        if ($postObj === false) {
-            die('parse xml error');
-        }
-        if ($postObj->return_code != 'SUCCESS') {
-            die("error_code: ".$postObj->err_code.",msg: ".$postObj->return_msg);
-        }
-        
-        /*更改订单状态*/
-        $orderInfo = OrderInfo::find()->where('order_sn = :sn', [':sn'=>$postObj->out_trade_no])->one();
-        if(!empty($orderInfo)){
-            $orderInfo->pay_status = 3;
-            $orderInfo->pay_id = 3;
-            $orderInfo->pay_name = '微信支付';
-            $orderInfo->money_paid = bcdiv($postObj->total_fee, 100, 2);//分转成元;
-
-            $orderInfo->pay_time = time();
-            $orderInfo->save(false);
-        }
-
-        /*取出会员信息*/
-        $users = Users::find()->where('wechat_openid = :openid', [':openid'=>$postObj->openid])->one();
-        if(!empty($users)){
-            /*记录支付日志*/
-            $PayLog = new PayLog();
-            $PayLog->addLog($users->user_id, $postObj);
-        }
-
-
-        return '<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>';
     }
 
 
@@ -162,12 +51,12 @@ class PayController extends Controller
         //     Yii::$app->end();
         // }
 
-        require_once "../component/WxpayAPI/lib/WxPay.Api.php";
-        require_once "../component/WxpayAPI/example/WxPay.JsApiPay.php";
-        require_once '../component/WxpayAPI/example/log.php';
+        require_once "../../component/WxpayAPI/lib/WxPay.Api.php";
+        require_once "../../component/WxpayAPI/example/WxPay.JsApiPay.php";
+        require_once '../../component/WxpayAPI/example/log.php';
 
         //初始化日志
-        $logHandler= new \CLogFileHandler("../component/WxpayAPI/logs/".date('Y-m-d').'.log');
+        $logHandler= new \CLogFileHandler("../../component/WxpayAPI/logs/".date('Y-m-d').'.log');
         $log = \Log::Init($logHandler, 15);
 
         //打印输出数组信息
@@ -214,7 +103,7 @@ class PayController extends Controller
          * 参考http://mp.weixin.qq.com/wiki/17/c0f37d5704f0b64713d5d2c37b468d75.html）
          */
 
-        return $this->renderFile('./wapshop/index/pay.html',[
+        return $this->renderFile('./pay.html',[
             'jsApiParameters'=> $jsApiParameters,
             'editAddress'=> $editAddress
         ]);   
