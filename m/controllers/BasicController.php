@@ -15,10 +15,10 @@ class BasicController extends Controller
     {
         header('Access-Control-Allow-Credentials:true');
         // header('Access-Control-Allow-Origin:http://local.www.judanongye.com');
-        header('Access-Control-Allow-Origin:http://10.9.87.104');
+        header('Access-Control-Allow-Origin:http://10.9.87.104:3000');
         header('Access-Control-Allow-Methods:POST,GET');
 
-        // MInfo::setLoginInfo(1, '%E9%9B%B6%E5%BA%A6%EE%84%9D+%E7%81%AB%E7%84%B0');//存入登录信息
+        MInfo::setLoginInfo(2, '%E5%87%8C%E4%B9%B1%E7%9A%84%E5%8D%B7%E6%AF%9B%E6%80%AA');//存入登录信息
 
         /*验证登录*/
         if(!MInfo::getIsLogin()){

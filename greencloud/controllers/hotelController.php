@@ -9,11 +9,12 @@ use libs\GreencloudInfo;
 
 class HotelController extends BasicController
 {
-    // private $hotelGroupId;
+    private $hotelGroupId = 2;
+    private $hotelId = 9;
 
     public function init()
     {
-        // $curl = new Curl();
+        
     }
 
 
@@ -33,22 +34,21 @@ class HotelController extends BasicController
 		    echo 'Error: ' . $curl->errorCode . ': ' . $curl->errorMessage . "\n";
 		} else {
 		    Tools::p(json_decode($curl->response));
-            // return $curl->response;
 		}
     }
 
     /*2-查询房型列表*/
     public function actionRoomList()
     {
-    	$post = array(
-    		'hotelGroupId' => 2,//集团ID（1-查询酒店信息接口中获取hotelGroupId）
-    		'hotelId' => 9,//酒店ID（1-查询酒店信息接口中获取,id）
-    	);
+    	// $post = array(
+    	// 	'hotelGroupId' => 2,//集团ID（1-查询酒店信息接口中获取hotelGroupId）
+    	// 	'hotelId' => 9,//酒店ID（1-查询酒店信息接口中获取,id）
+    	// );
     	$param = array(
     		'appKey' => $this->appKey,
 	    	'sessionId' => GreencloudInfo::getSessionid(),
-		    'hotelGroupId' => $post['hotelGroupId'],
-		    'hotelId' => (int)$post['hotelId'],
+		    'hotelGroupId' => $this->hotelGroupId,
+		    'hotelId' => $this->hotelId,
     	);
     	$param['sign'] = $this->computeSign($param);
 
@@ -57,7 +57,8 @@ class HotelController extends BasicController
 		if ($curl->error) {
 		    echo 'Error: ' . $curl->errorCode . ': ' . $curl->errorMessage . "\n";
 		} else {
-		    Tools::p($curl->response);
+		    Tools::p(json_decode($curl->response));
+            // return $curl->response;
 		}
     }
 
@@ -90,7 +91,7 @@ class HotelController extends BasicController
 		if ($curl->error) {
 		    echo 'Error: ' . $curl->errorCode . ': ' . $curl->errorMessage . "\n";
 		} else {
-		    Tools::p($curl->response);
+		    Tools::p(json_decode($curl->response));
 		}
     }
 

@@ -20,15 +20,81 @@ class Menu extends \yii\db\ActiveRecord
             ['icon', 'string', 'max' => 16],
             ['parentid', 'integer', 'message' => '父ID格式不正确'],
             ['m', 'string', 'max' => 16],
-            ['c', 'required', 'message' => '控制器名称不能为空'],
+            // ['c', 'required', 'message' => '控制器名称不能为空'],
             ['c', 'string', 'max' => 16],
-            ['a', 'required', 'message' => '方法名称不能为空'],
+            // ['a', 'required', 'message' => '方法名称不能为空'],
             ['a', 'string', 'max' => 16],
             ['data', 'string', 'max' => 128],
             ['sort', 'integer', 'message' => '父ID格式不正确'],
             ['display', 'in', 'range' => ['0', '1'],  'message' => '是否显示格式不正确'],
         ];
     }
+
+    /*
+    添加菜单
+    $data   提交的数据
+    */
+    public function addMenu($data)
+    {
+        // P($data);
+        if($this->load($data) and $this->validate()){
+            if($this->save(false)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    /*
+    修改菜单
+    $id     
+    $data   提交的数据
+    */
+    public function modMenu($id, $data)
+    {
+        if($this->load($data) and $this->validate()){
+            $menu = self::find()->where('id = :uid', [':uid' => $id])->one();
+            if(empty($menu)){//没有找到对应记录
+               return false; 
+            };
+            // P($menu);
+            if(isset($data['Menu']['name']) and !empty($data['Menu']['name'])){
+                $menu->name = $data['Menu']['name'];
+            }
+            if(isset($data['Menu']['icon']) and !empty($data['Menu']['icon'])){
+                $menu->icon = $data['Menu']['icon'];
+            }
+            if(isset($data['Menu']['parentid']) and !empty($data['Menu']['parentid'])){
+                $menu->parentid = $data['Menu']['parentid'];
+            }
+            if(isset($data['Menu']['m']) and !empty($data['Menu']['m'])){
+                $menu->m = $data['Menu']['m'];
+            }
+            if(isset($data['Menu']['c']) and !empty($data['Menu']['c'])){
+                $menu->c = $data['Menu']['c'];
+            }
+            if(isset($data['Menu']['a']) and !empty($data['Menu']['a'])){
+                $menu->a = $data['Menu']['a'];
+            }
+            if(isset($data['Menu']['data']) and !empty($data['Menu']['data'])){
+                $menu->data = $data['Menu']['data'];
+            }
+            if(isset($data['Menu']['sort']) and !empty($data['Menu']['sort'])){
+                $menu->sort = $data['Menu']['sort'];
+            }
+            if(isset($data['Menu']['display'])){
+                $menu->display = $data['Menu']['display'];
+            }
+            if($menu->save(false)){
+                return true;
+            };
+        }
+        return false;
+    }
+
+
+
 
     /*
     取出树形分类

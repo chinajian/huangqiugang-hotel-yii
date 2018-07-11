@@ -12,8 +12,8 @@ class BasicController extends Controller
 	protected $v = '3.0';
 	protected $format = 'json';
 	protected $local = 'zh_CN';
-	protected $hotelGroupId = 2;
-	protected $hotelId = 9;
+	// protected $hotelGroupId = 2;
+	// protected $hotelId = 9;
 
     /*
     计算签名
