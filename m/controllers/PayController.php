@@ -82,7 +82,7 @@ class PayController extends Controller
         $input->SetTime_start(date("YmdHis"));
         $input->SetTime_expire(date("YmdHis", time() + 600));
         $input->SetGoods_tag("test");
-        $input->SetNotify_url("http://shop.judanongye.com/WxpayAPI/example/notify.php");
+        $input->SetNotify_url("http://m.api.ghchotel.com/../../components/WxpayAPI/example/notify.php");
         $input->SetTrade_type("JSAPI");
         $input->SetOpenid($openId);
         // $input->SetAppid(WxPayConfig::APPID);
@@ -103,7 +103,7 @@ class PayController extends Controller
          * 参考http://mp.weixin.qq.com/wiki/17/c0f37d5704f0b64713d5d2c37b468d75.html）
          */
 
-        return $this->renderFile('./pay.html',[
+        return $this->renderFile('./pay_test.html',[
             'jsApiParameters'=> $jsApiParameters,
             'editAddress'=> $editAddress
         ]);   
