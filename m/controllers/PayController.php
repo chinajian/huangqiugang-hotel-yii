@@ -70,7 +70,7 @@ class PayController extends Controller
         //①、获取用户openid
         $tools = new \JsApiPay();
         // $openId = $tools->GetOpenid();
-        $openId = 'oTYJ3waOhYCSLyuCPw0Zfi4vGJU0';
+        $openId = 'ovx7C1LGqg1CjMhtNkMXmOd0VbLo';
         echo $openId;
 
         //②、统一下单
