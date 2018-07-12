@@ -104,6 +104,26 @@ class PayController extends Controller
     */
     public function actionBacknotify()
     {
+        
+        /*更改订单状态*/
+        $orderInfo = OrderInfo::find()->where('order_sn = 10')->one();
+        if(!empty($orderInfo)){
+            $orderInfo->order_status = 2;
+            $orderInfo->pay_id = 3;
+            $orderInfo->pay_name = '微信支付';
+            $orderInfo->money_paid = 0.06;//分转成元;
+
+            $orderInfo->pay_time = time();
+            $orderInfo->save(false);
+        }
+
+
+
+        return '<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>';
+    }
+
+    public function actionBacknotify2()
+    {
         //获取通知的数据  
         $postStr = file_get_contents("php://input");
         $postObj = simplexml_load_string($postStr, 'SimpleXMLElement', LIBXML_NOCDATA);
