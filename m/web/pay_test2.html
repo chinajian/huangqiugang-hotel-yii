@@ -15,9 +15,10 @@
 	            data: {'order_id': 6},
 	            dataType: 'json',
 	            success: function(data){
-	            	alert(data.code);
-	            	return;
-	            	// if(){}
+	            	if(data.code != undefined){
+	            		alert(data.msg);
+	            	}
+	            	// return;
 	                jsApiParamenters = data
 	                if (typeof WeixinJSBridge == "undefined"){
 	                    if( document.addEventListener ){

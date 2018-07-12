@@ -118,7 +118,7 @@ class PayController extends Controller
         /*更改订单状态*/
         $orderInfo = OrderInfo::find()->where('order_sn = :sn', [':sn'=>$postObj->out_trade_no])->one();
         if(!empty($orderInfo)){
-            $orderInfo->pay_status = 2;
+            $orderInfo->order_status = 2;
             $orderInfo->pay_id = 3;
             $orderInfo->pay_name = '微信支付';
             $orderInfo->money_paid = bcdiv($postObj->total_fee, 100, 2);//分转成元;
