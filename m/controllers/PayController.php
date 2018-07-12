@@ -106,7 +106,7 @@ class PayController extends Controller
     {
         
         /*更改订单状态*/
-        $orderInfo = OrderInfo::find()->where('order_sn = 10')->one();
+        $orderInfo = OrderInfo::find()->where('order_sn = 201807931411')->one();
         if(!empty($orderInfo)){
             $orderInfo->order_status = 2;
             $orderInfo->pay_id = 3;
