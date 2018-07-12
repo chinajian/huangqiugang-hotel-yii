@@ -5,8 +5,9 @@ use Yii;
 use yii\web\Controller;
 use app\models\User;
 use app\models\OrderInfo;
-// use app\models\PayLog;
+use app\models\PayLog;
 use yii\helpers\Html;
+use libs\Tools;
 use libs\MInfo;
 
 
@@ -22,9 +23,9 @@ class PayController extends Controller
         header('Access-Control-Allow-Origin:*');
         $user_id = MInfo::getUserid();
         $post = Yii::$app->request->post();
-        // $post = array(
-        //     'order_id' => 8,//订单ID
-        // );
+        $post = array(
+            'order_id' => 8,//订单ID
+        );
         // P($post);
 
         $order_id = (int)(isset($post['order_id'])?$post['order_id']:0);
@@ -41,6 +42,7 @@ class PayController extends Controller
 
         $user = User::find()->where('user_id = ' . $orderInfo->user_id)->one();
         $this->openId = $user->wechat_openid;
+        // P($this->openId);
         
 
         return $this->getJsApiParameters($orderInfo['price'], $orderInfo['order_sn']);

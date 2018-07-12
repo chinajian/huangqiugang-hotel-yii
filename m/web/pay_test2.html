@@ -10,11 +10,13 @@
 	    {
 	        $.ajax({
 	            type: 'POST',
-	            url: 'http://m.api.ghchotel.com/index.php?r=/pay/pay-order&getJsApiParameters=true',  //獲取後臺中的數據
+	            url: 'http://m.api.ghchotel.com/index.php?r=/pay/pay-order',  //獲取後臺中的數據
 	            // data:"_csrf="+_csrf+"&ssid="+ssid,
 	            data: {'order_id': 6},
 	            dataType: 'json',
 	            success: function(data){
+	            	alert(data);
+	            	// if(){}
 	                jsApiParamenters = data
 	                if (typeof WeixinJSBridge == "undefined"){
 	                    if( document.addEventListener ){
