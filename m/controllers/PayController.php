@@ -59,9 +59,9 @@ class PayController extends Controller
     */
     private function getJsApiParameters($money, $ordersn='')
     {
-        require_once "../../component/WxpayAPI/lib/WxPay.Api.php";
-        require_once "../../component/WxpayAPI/example/WxPay.JsApiPay.php";
-        require_once '../../component/WxpayAPI/example/log.php';
+        require_once "../../components/WxpayAPI/lib/WxPay.Api.php";
+        require_once "../../components/WxpayAPI/example/WxPay.JsApiPay.php";
+        require_once '../../components/WxpayAPI/example/log.php';
         
         $money = (int)($money*100);//转换成分
         if(empty($ordersn)){
@@ -69,7 +69,7 @@ class PayController extends Controller
         }
 
         //初始化日志
-        $logHandler= new \CLogFileHandler("../../component/WxpayAPI/logs/".date('Y-m-d').'.log');
+        $logHandler= new \CLogFileHandler("../../components/WxpayAPI/logs/".date('Y-m-d').'.log');
         $log = \Log::Init($logHandler, 15);
 
         //①、获取用户openid
