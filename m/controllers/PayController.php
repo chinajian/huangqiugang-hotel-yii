@@ -14,16 +14,17 @@ class PayController extends Controller
 {
 	public $layout = false;
     public $enableCsrfValidation = false;
+    private $openId = '';
     
     /*订单支付*/
-    public function actionPayOrder($getJsApiParameters = '')
+    public function actionPayOrder()
     {
         header('Access-Control-Allow-Origin:*');
         $user_id = MInfo::getUserid();
         $post = Yii::$app->request->post();
-        $post = array(
-            'order_id' => 8,//订单ID
-        );
+        // $post = array(
+        //     'order_id' => 8,//订单ID
+        // );
         // P($post);
 
         $order_id = (int)(isset($post['order_id'])?$post['order_id']:0);
@@ -37,19 +38,13 @@ class PayController extends Controller
             return Tools::showRes(60001, '订单ID不存在');
             Yii::$app->end();
         }
-        if($getJsApiParameters == true){
-            return $this->getJsApiParameters($orderInfo['price'], $orderInfo['order_sn']);
-        }
 
-        echo '更改状态';
-        // $orderInfo = new OrderInfo;
-        // $res = $orderInfo->payOrder($order_id);
-        // if($res === true){
-        //     return Tools::showRes();
-        //     Yii::$app->end();
-        // }else{
-        //     return $res;
-        // }
+        $user = User::find()->where('user_id = ' . $orderInfo->user_id)->one();
+        $this->openId = $user->wechat_openid;
+        
+
+        return $this->getJsApiParameters($orderInfo['price'], $orderInfo['order_sn']);
+
     }
 
     /*
@@ -75,7 +70,7 @@ class PayController extends Controller
         //①、获取用户openid
         $tools = new \JsApiPay();
         // $openId = $tools->GetOpenid();
-        $openId = 'ovx7C1LGqg1CjMhtNkMXmOd0VbLo';
+        $openId = $this->openId;
         // echo $openId;
 
         //②、统一下单
@@ -87,7 +82,7 @@ class PayController extends Controller
         $input->SetTime_start(date("YmdHis"));//发起时间
         $input->SetTime_expire(date("YmdHis", time() + 600));//失效时间
         // $input->SetGoods_tag("test");
-        $input->SetNotify_url("http://m.api.ghchotel.com");
+        $input->SetNotify_url("http://m.api.ghchotel.com/index.php?r=/pay/backnotify");//回调地址
     
         $input->SetTrade_type("JSAPI");
         $input->SetOpenid($openId);
@@ -102,11 +97,44 @@ class PayController extends Controller
 
 
     /*
-    购买商品的回调函数
+    购买回调函数
     仅限微信支付
     */
-    public function actionBacknotifyBuygoods()
+    public function actionBacknotify()
     {
+        //获取通知的数据  
+        $postStr = file_get_contents("php://input");
+        $postObj = simplexml_load_string($postStr, 'SimpleXMLElement', LIBXML_NOCDATA);
+
+        if ($postObj === false) {
+            die('parse xml error');
+        }
+        if ($postObj->return_code != 'SUCCESS') {
+            die("error_code: ".$postObj->err_code.",msg: ".$postObj->return_msg);
+        }
+        
+        /*更改订单状态*/
+        $orderInfo = OrderInfo::find()->where('order_sn = :sn', [':sn'=>$postObj->out_trade_no])->one();
+        if(!empty($orderInfo)){
+            $orderInfo->pay_status = 2;
+            $orderInfo->pay_id = 3;
+            $orderInfo->pay_name = '微信支付';
+            $orderInfo->money_paid = bcdiv($postObj->total_fee, 100, 2);//分转成元;
+
+            $orderInfo->pay_time = time();
+            $orderInfo->save(false);
+        }
+
+        /*取出会员信息*/
+        $user = User::find()->where('wechat_openid = :openid', [':openid'=>$postObj->openid])->one();
+        if(!empty($user)){
+            /*记录支付日志*/
+            $PayLog = new PayLog();
+            $PayLog->addLog($user->user_id, $postObj);
+        }
+
+
+        return '<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>';
     }
 
 
