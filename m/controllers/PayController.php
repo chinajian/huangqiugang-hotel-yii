@@ -75,7 +75,7 @@ class PayController extends Controller
         //①、获取用户openid
         $tools = new \JsApiPay();
         // $openId = $tools->GetOpenid();
-        $openId = WapshopInfo::getOpenid();
+        $openId = 'ovx7C1LGqg1CjMhtNkMXmOd0VbLo';
         // echo $openId;
 
         //②、统一下单
