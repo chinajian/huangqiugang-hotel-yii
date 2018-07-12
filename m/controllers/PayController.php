@@ -32,7 +32,7 @@ class PayController extends Controller
             Yii::$app->end();
         }
 
-        $orderInfo = OrderInfo::find()->where('order_id = :id' => [':id' => $id])->one();
+        $orderInfo = OrderInfo::find()->where('order_id = :id' => [':id' => $order_id])->one();
         if(empty($orderInfo)){
             return Tools::showRes(60001, '订单ID不存在');
             Yii::$app->end();
@@ -41,14 +41,15 @@ class PayController extends Controller
             return $this->getJsApiParameters($orderInfo['price'], $orderInfo['order_sn']);
         }
 
-        $orderInfo = new OrderInfo;
-        $res = $orderInfo->payOrder($id);
-        if($res === true){
-            return Tools::showRes();
-            Yii::$app->end();
-        }else{
-            return $res;
-        }
+        echo '更改状态';
+        // $orderInfo = new OrderInfo;
+        // $res = $orderInfo->payOrder($order_id);
+        // if($res === true){
+        //     return Tools::showRes();
+        //     Yii::$app->end();
+        // }else{
+        //     return $res;
+        // }
     }
 
     /*
