@@ -84,7 +84,7 @@ class PayController extends Controller
         $input->SetTime_start(date("YmdHis"));//发起时间
         $input->SetTime_expire(date("YmdHis", time() + 600));//失效时间
         // $input->SetGoods_tag("test");
-        $input->SetNotify_url("http://m.api.ghchotel.com/index.php?r=/pay/backnotify");//回调地址
+        $input->SetNotify_url("http://m.api.ghchotel.com/backnotify.php");//回调地址
     
         $input->SetTrade_type("JSAPI");
         $input->SetOpenid($openId);
@@ -102,27 +102,8 @@ class PayController extends Controller
     购买回调函数
     仅限微信支付
     */
+
     public function actionBacknotify()
-    {
-        
-        /*更改订单状态*/
-        $orderInfo = OrderInfo::find()->where('order_sn = 201807931411')->one();
-        if(!empty($orderInfo)){
-            $orderInfo->order_status = 2;
-            $orderInfo->pay_id = 3;
-            $orderInfo->pay_name = '微信支付';
-            $orderInfo->money_paid = 0.06;//分转成元;
-
-            $orderInfo->pay_time = time();
-            $orderInfo->save(false);
-        }
-
-
-
-        return '<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>';
-    }
-
-    public function actionBacknotify2()
     {
         //获取通知的数据  
         $postStr = file_get_contents("php://input");
@@ -161,7 +142,7 @@ class PayController extends Controller
 
 
     /*支付测试*/
-    public function actionPayTest()
+    public function actionPayTest($ordersn)
     {
         // header('Access-Control-Allow-Origin:*');
         // $uid = WapshopInfo::getUserId();
@@ -199,12 +180,13 @@ class PayController extends Controller
         $input->SetBody("test");
         $input->SetAttach("test");
         // $input->SetOut_trade_no(\WxPayConfig::MCHID.date("YmdHis"));
-        $input->SetOut_trade_no('201807254813');
+        $input->SetOut_trade_no($ordersn);
         $input->SetTotal_fee("1");
         $input->SetTime_start(date("YmdHis"));
         $input->SetTime_expire(date("YmdHis", time() + 600));
         $input->SetGoods_tag("test");
-        $input->SetNotify_url("http://m.api.ghchotel.com/index.php?r=/pay/backnotify");
+        // $input->SetNotify_url("http://m.api.ghchotel.com/index.php?r=/pay/backnotify");
+        $input->SetNotify_url("http://m.api.ghchotel.com/index_aa.php");
         $input->SetTrade_type("JSAPI");
         $input->SetOpenid($openId);
         // $input->SetAppid(WxPayConfig::APPID);
