@@ -32,7 +32,7 @@ class PayController extends Controller
             Yii::$app->end();
         }
 
-        $orderInfo = OrderInfo::find()->where('order_id = :id' => [':id' => $order_id])->one();
+        $orderInfo = OrderInfo::find()->where('order_id = :id', [':id' => $order_id])->one();
         if(empty($orderInfo)){
             return Tools::showRes(60001, '订单ID不存在');
             Yii::$app->end();
