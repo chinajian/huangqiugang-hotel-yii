@@ -16,19 +16,89 @@ class PayController extends Controller
     public $enableCsrfValidation = false;
     
     /*订单支付*/
-    public function actionPayOrder()
+    public function actionPayOrder($getJsApiParameters = '')
     {
+        header('Access-Control-Allow-Origin:*');
+        $user_id = MInfo::getUserid();
+        $post = Yii::$app->request->post();
+        $post = array(
+            'order_id' => 8,//订单ID
+        );
+        // P($post);
+
+        $order_id = (int)(isset($post['order_id'])?$post['order_id']:0);
+        if(!$order_id){
+            return Tools::showRes(10300, '参数有误！');
+            Yii::$app->end();
+        }
+
+        $orderInfo = OrderInfo::find()->where('order_id = :id' => [':id' => $id])->one();
+        if(empty($orderInfo)){
+            return Tools::showRes(60001, '订单ID不存在');
+            Yii::$app->end();
+        }
+        if($getJsApiParameters == true){
+            return $this->getJsApiParameters($orderInfo['price'], $orderInfo['order_sn']);
+        }
+
+        $orderInfo = new OrderInfo;
+        $res = $orderInfo->payOrder($id);
+        if($res === true){
+            return Tools::showRes();
+            Yii::$app->end();
+        }else{
+            return $res;
+        }
     }
 
     /*
     获取jsApiParameters
     $money      支付金额
     $ordersn    订单号
-    $flag       1-商品购买2-充值  两个回调地址不一样
     */
-    private function getJsApiParameters($money, $ordersn='', $flag = 1)
+    private function getJsApiParameters($money, $ordersn='')
     {
+        require_once "../../component/WxpayAPI/lib/WxPay.Api.php";
+        require_once "../../component/WxpayAPI/example/WxPay.JsApiPay.php";
+        require_once '../../component/WxpayAPI/example/log.php';
+        
+        $money = (int)($money*100);//转换成分
+        if(empty($ordersn)){
+            $ordersn = \WxPayConfig::MCHID.date("YmdHis");
+        }
+
+        //初始化日志
+        $logHandler= new \CLogFileHandler("../../component/WxpayAPI/logs/".date('Y-m-d').'.log');
+        $log = \Log::Init($logHandler, 15);
+
+        //①、获取用户openid
+        $tools = new \JsApiPay();
+        // $openId = $tools->GetOpenid();
+        $openId = WapshopInfo::getOpenid();
+        // echo $openId;
+
+        //②、统一下单
+        $input = new \WxPayUnifiedOrder();
+        $input->SetBody("环球港酒店-客房预订");//商品描述
+        // $input->SetAttach("test");
+        $input->SetOut_trade_no($ordersn);//商户订单号
+        $input->SetTotal_fee($money);//支付金额
+        $input->SetTime_start(date("YmdHis"));//发起时间
+        $input->SetTime_expire(date("YmdHis", time() + 600));//失效时间
+        // $input->SetGoods_tag("test");
+        $input->SetNotify_url("http://m.api.ghchotel.com");
+    
+        $input->SetTrade_type("JSAPI");
+        $input->SetOpenid($openId);
+
+        $order = \WxPayApi::unifiedOrder($input);
+
+        $jsApiParameters = $tools->GetJsApiParameters($order);
+
+
+        return $jsApiParameters; 
     }
+
 
     /*
     购买商品的回调函数
