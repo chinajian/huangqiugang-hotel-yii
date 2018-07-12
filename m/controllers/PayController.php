@@ -178,12 +178,13 @@ class PayController extends Controller
         $input = new \WxPayUnifiedOrder();
         $input->SetBody("test");
         $input->SetAttach("test");
-        $input->SetOut_trade_no(\WxPayConfig::MCHID.date("YmdHis"));
+        // $input->SetOut_trade_no(\WxPayConfig::MCHID.date("YmdHis"));
+        $input->SetOut_trade_no('201807254813');
         $input->SetTotal_fee("1");
         $input->SetTime_start(date("YmdHis"));
         $input->SetTime_expire(date("YmdHis", time() + 600));
         $input->SetGoods_tag("test");
-        $input->SetNotify_url("http://m.api.ghchotel.com/../../components/WxpayAPI/example/notify.php");
+        $input->SetNotify_url("http://m.api.ghchotel.com/index.php?r=/pay/backnotify");
         $input->SetTrade_type("JSAPI");
         $input->SetOpenid($openId);
         // $input->SetAppid(WxPayConfig::APPID);
