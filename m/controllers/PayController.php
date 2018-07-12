@@ -23,9 +23,9 @@ class PayController extends Controller
         header('Access-Control-Allow-Origin:*');
         $user_id = MInfo::getUserid();
         $post = Yii::$app->request->post();
-        $post = array(
-            'order_id' => 8,//订单ID
-        );
+        // $post = array(
+        //     'order_id' => 8,//订单ID
+        // );
         // P($post);
 
         $order_id = (int)(isset($post['order_id'])?$post['order_id']:0);
