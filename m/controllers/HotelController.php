@@ -168,6 +168,9 @@ class HotelController extends BasicController
     /*调取actionQueryHotelList接口，然后匹配出房间详情*/
     public function actionRoom($ratecode = '', $rmtype = '', $date = '', $dayCount = 1)
     {
+        if(Yii::$app->request->isPost){
+            $post = Yii::$app->request->post();
+        };
         if(empty($ratecode)){
             $ratecode = (isset($post['ratecode'])?$post['ratecode']:"");
         };
