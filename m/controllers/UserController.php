@@ -172,7 +172,34 @@ class UserController extends BasicController
     public function actionCancelOrder()
     {
         /*如果有数据，进行修改*/
-
+        if(Yii::$app->request->isPost){
+        // if(1){
+            $post = Yii::$app->request->post();
+            // $post = array(
+            //     "order_id" => 1
+            // );
+            // P($post);
+            $order_id = (int)(isset($post['order_id'])?$post['order_id']:0);
+            if(!$order_id){
+                return Tools::showRes(10300, '参数有误！');
+                Yii::$app->end();
+            }
+            /*根据索引，取出对应的价格区间*/
+            $order_info = OrderInfo::find()->where('order_id = :id', [':id' => $order_id])->andWhere('user_id =' . MInfo::getUserid())->one();
+            if(empty($order_info)){
+                return Tools::showRes(10300, '没有此订单');
+                Yii::$app->end();
+            }
+            if($order_info->order_status > 1){
+                return Tools::showRes(10300, '只有未支付的订单才可以取消');
+                Yii::$app->end();
+            };
+            /*修改数据*/
+            $order_info->order_status = 3;
+            if($order_info->save(false)){
+                return Tools::showRes();
+            };
+        }
         return Tools::showRes(10300, '参数有误！');
     }
 
