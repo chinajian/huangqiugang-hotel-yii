@@ -137,6 +137,36 @@ class UserController extends BasicController
         return Tools::showRes(0, $orderInfoList);
     }
 
+    /*订单详情*/
+    public function actionOrderDetail($order_id = 0)
+    {
+        /*如果有数据*/
+        $get = Yii::$app->request->get();
+        $get = array(
+            "order_id" => 1
+        );
+        // P($get);
+        $order_id = (int)(isset($get['order_id'])?$get['order_id']:0);
+        if(!$order_id){
+            return Tools::showRes(10300, '参数有误！');
+            Yii::$app->end();
+        }
+        /*根据索引，取出对应的价格区间*/
+        $order_info = OrderInfo::find()->where('order_id = :id', [':id' => $order_id])->andWhere('user_id =' . MInfo::getUserid())->asArray()->one();
+        if(empty($order_info)){
+            return Tools::showRes(10300, '没有此订单');
+            Yii::$app->end();
+        };
+        unset($order_info["user_id"]);
+        unset($order_info["pay_id"]);
+        unset($order_info["add_time"]);
+        unset($order_info["pay_time"]);
+        $order_info["arr"] = date("Y-m-d H:i:s");
+        $order_info["dep"] = date("Y-m-d H:i:s");
+        // P($order_info);
+        return Tools::showRes(0, $order_info);
+    }
+
 
     /*取消订单*/
     public function actionCancelOrder()
