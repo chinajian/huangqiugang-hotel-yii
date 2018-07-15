@@ -171,6 +171,7 @@ class UserController extends BasicController
     /*取消订单*/
     public function actionCancelOrder()
     {
+        header('Access-Control-Allow-Origin:*');
         /*如果有数据，进行修改*/
         if(Yii::$app->request->isPost){
         // if(1){
