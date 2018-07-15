@@ -50,8 +50,8 @@ class PublicController extends Controller
         $get = Yii::$app->request->get();
         if(!array_key_exists('code', $get)){//#第一步：用户同意授权，获取code
             $redirectUrl = urlencode('http://m.api.ghchotel.com/index.php?r=/public/login-by-wechat');
-            // $state = isset($get['state'])?urlencode($get['state']):urlencode('http://local.www.judanongye.com/index.html');
-            $state = isset($get['state'])?urlencode($get['state']):urlencode('http://10.9.87.104/#/');
+            $state = isset($get['state'])?urlencode($get['state']):urlencode('http://m.ghchotel.com/fc-hotel/mobile/dist/#/hotel/');
+            // $state = isset($get['state'])?urlencode($get['state']):urlencode('http://10.9.87.104/#/');
             $url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid='. Yii::$app->params['appId'] .'&redirect_uri='. $redirectUrl .'&response_type=code&scope=snsapi_userinfo&state='. $state .'#wechat_redirect';
             //P($url);            
             $this->redirect($url);
