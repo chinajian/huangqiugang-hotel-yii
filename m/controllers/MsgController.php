@@ -19,8 +19,8 @@ class MsgController extends Controller
     public function beforeAction($action)
     {
         header('Access-Control-Allow-Credentials:true');
-        // header('Access-Control-Allow-Origin:http://local.www.judanongye.com');
-        header('Access-Control-Allow-Origin:http://10.9.87.104:3000');
+        header('Access-Control-Allow-Origin:http://m.ghchotel.com');
+        // header('Access-Control-Allow-Origin:http://10.9.87.104:3000');
         header('Access-Control-Allow-Methods:POST,GET');
         return true;
     }

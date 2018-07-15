@@ -107,7 +107,7 @@ class UserController extends BasicController
 
     /*
     我的订单
-    $status     订单状态 空-全部 1未付款, 2已付款, 3已取消, 4-待入住, 5-完成;
+    $status     订单状态 空-全部 1未付款, 2已付款, 3已取消, 4-待入住, 5-待评价, 6-完成
     */
     public function actionMyOrder($status = '')
     {

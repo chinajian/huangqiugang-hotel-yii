@@ -14,11 +14,11 @@ class BasicController extends Controller
 	public function beforeAction($action)
     {
         header('Access-Control-Allow-Credentials:true');
-        // header('Access-Control-Allow-Origin:http://local.www.judanongye.com');
-        header('Access-Control-Allow-Origin:http://10.9.87.104:3000');
+        header('Access-Control-Allow-Origin:http://m.ghchotel.com');
+        // header('Access-Control-Allow-Origin:http://10.9.87.104:3000');
         header('Access-Control-Allow-Methods:POST,GET');
 
-        MInfo::setLoginInfo(2, '%E5%87%8C%E4%B9%B1%E7%9A%84%E5%8D%B7%E6%AF%9B%E6%80%AA');//存入登录信息
+        // MInfo::setLoginInfo(2, '%E5%87%8C%E4%B9%B1%E7%9A%84%E5%8D%B7%E6%AF%9B%E6%80%AA');//存入登录信息
 
         /*验证登录*/
         if(!MInfo::getIsLogin()){

@@ -14,6 +14,8 @@ $config = yii\helpers\ArrayHelper::merge(
     require __DIR__ . '/../config/main-local.php'
 );
 
+require_once(__DIR__ . '/../config/constant.php');//引入常量
+
 /*打印*/
 if(!function_exists('P')){
     function P($arr, $die = true)
