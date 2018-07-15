@@ -172,7 +172,7 @@ class HotelController extends BasicController
         // if(1){
             $post = Yii::$app->request->post();
             // $post = array(
-            //     // 'ratecode' => 'MEM',//房价码
+            //     'ratecode' => 'MEM',//房价码
             //     'rmtype' => 'DXT',//房型
             //     'date' => '2018-06-11',//入住时间
             //     'dayCount' => 1,//入住天数
