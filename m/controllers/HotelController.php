@@ -320,7 +320,7 @@ class HotelController extends BasicController
                     }
                 }
 
-                return Tools::showRes();
+                return Tools::showRes(0, $order_id);
                 Yii::$app->end();
             }else{
                 if($orderInfoModel->hasErrors()){
