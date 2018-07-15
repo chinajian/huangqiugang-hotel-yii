@@ -199,8 +199,8 @@ class UserController extends BasicController
             if($order_info->save(false)){
                 return Tools::showRes();
             };
-            return;
         }
+        return;
     }
 
 }
