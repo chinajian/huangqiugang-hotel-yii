@@ -315,7 +315,9 @@ class HotelController extends BasicController
                     // echo $res->msg->crsNo;
                     /*完善 中央预定号*/
                     // $orderInfoModel->setCrsNo($order_id, $res->msg->crsNo);
-                    $orderInfoModel->updateAll(['crs_no' => $res->msg->crsNo], 'order_id = :order_id', [':order_id' => $order_id]);
+                    if($res->msg->crsNo != ""){
+                        $orderInfoModel->updateAll(['crs_no' => $res->msg->crsNo], 'order_id = :order_id', [':order_id' => $order_id]);
+                    }
                 }
 
                 return Tools::showRes();
