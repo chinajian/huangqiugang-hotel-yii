@@ -200,7 +200,7 @@ class UserController extends BasicController
                 return Tools::showRes();
             };
         }
-        return;
+        return Tools::showRes(-1);
     }
 
 }
