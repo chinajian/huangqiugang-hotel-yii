@@ -13,6 +13,15 @@ use libs\Tools;
 
 class UserController extends BasicController
 {
+    public function beforeAction($action)
+    {
+        header('Access-Control-Allow-Credentials:true');
+        header('Access-Control-Allow-Origin:http://m.ghchotel.com');
+        // header('Access-Control-Allow-Origin:http://10.9.87.104:3000');
+        header('Access-Control-Allow-Methods:POST,GET');
+        return true;
+    }
+    
     /**
      * 个人信息
      */
@@ -171,7 +180,6 @@ class UserController extends BasicController
     /*取消订单*/
     public function actionCancelOrder()
     {
-        header('Access-Control-Allow-Origin:*');
         /*如果有数据，进行修改*/
         if(Yii::$app->request->isPost){
         // if(1){
