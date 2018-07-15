@@ -180,7 +180,7 @@ class HotelController extends BasicController
         if(empty($ratecode)){
             $date = (isset($post['date'])?$post['date']:date('Y-m-d', time()));
         };
-        // P($date . '-' . $dayCount);
+        P($date . '-' . $dayCount);
         if(empty($ratecode) or empty($rmtype) or empty($date)){
             return Tools::showRes(10300, '参数有误！');
             Yii::$app->end();
