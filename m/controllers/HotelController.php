@@ -168,25 +168,15 @@ class HotelController extends BasicController
     /*调取actionQueryHotelList接口，然后匹配出房间详情*/
     public function actionRoom($ratecode = '', $rmtype = '', $date = '', $dayCount = 1)
     {
-        if(Yii::$app->request->isPost){
-        // if(1){
-            $post = Yii::$app->request->post();
-            // $post = array(
-            //     'ratecode' => 'MEM',//房价码
-            //     'rmtype' => 'DXT',//房型
-            //     'date' => '2018-06-11',//入住时间
-            //     'dayCount' => 1,//入住天数
-            // );
+        if(empty($ratecode)){
             $ratecode = (isset($post['ratecode'])?$post['ratecode']:"");
-            // $ratecode = 'MEM';
+        };
+        if(empty($rmtype)){
             $rmtype = (isset($post['rmtype'])?$post['rmtype']:"");
+        };
+        if(empty($ratecode)){
             $date = (isset($post['date'])?$post['date']:date('Y-m-d', time()));
-            $dayCount = (isset($post['dayCount'])?$post['dayCount']:1);
-        }else{
-            if(!empty($date)){
-                $date = explode(' ', $date)[0];
-            }
-        }
+        };
         // P($date . '-' . $dayCount);
         if(empty($ratecode) or empty($rmtype) or empty($date)){
             return Tools::showRes(10300, '参数有误！');
@@ -268,7 +258,7 @@ class HotelController extends BasicController
             //     'arr' => '2018-07-23 08:08:08',//到达日期
             //     'dep' => '2018-07-25 17:08:08',//离开日期
             //     'rmtype' => 'DXT',//房型
-            //     // 'rateCode' => 'MEM',//指定房价码
+            //     'rateCode' => 'MEM',//指定房价码
             //     'rm_num' => 1,//房数
             //     'rsv_man' => '小玉',//预订人
             //     'mobile' => '13915028703',//联系电话
