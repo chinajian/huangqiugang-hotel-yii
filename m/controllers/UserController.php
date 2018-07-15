@@ -125,7 +125,7 @@ class UserController extends BasicController
         $orderInfoModel = OrderInfo::find();
         $count = $orderInfoModel->count();
         $pageSize = Yii::$app->params['pageSize'];
-        $orderInfoList = $orderInfoModel->select(['rsv_man', 'mobile', 'rm_num', 'adult', 'order_sn', 'order_status', 'rateCode', 'rmtype', 'price', 'remarks', 'arr', 'dep', 'add_time'])->where('user_id =' . MInfo::getUserid())->where($andWhere)->offset($pageSize*($currPage-1))->limit($pageSize)->asArray()->all();
+        $orderInfoList = $orderInfoModel->select(['order_id', 'rsv_man', 'mobile', 'rm_num', 'adult', 'order_sn', 'order_status', 'rateCode', 'rmtype', 'price', 'remarks', 'arr', 'dep', 'add_time'])->where('user_id =' . MInfo::getUserid())->where($andWhere)->offset($pageSize*($currPage-1))->limit($pageSize)->asArray()->all();
         $roomModel = new Room;
         foreach($orderInfoList as $k => $v){
             $orderInfoList[$k]['arr'] = date("Y-m-d H:i:s", $v['arr']);
