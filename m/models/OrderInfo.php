@@ -44,6 +44,9 @@ class OrderInfo extends \yii\db\ActiveRecord
     public function addOrder($data)
     {
         // P($data);
+        if(!isset($data['OrderInfo']['crs_no']) or empty($data['OrderInfo']['crs_no'])){
+            $data['OrderInfo']['crs_no'] = "";
+        }
         $data['OrderInfo']['add_time'] = time();
         $data['OrderInfo']['order_sn'] = $this->createOrderSn();
         $data['OrderInfo']['order_status'] = 1;
