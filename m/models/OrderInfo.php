@@ -60,6 +60,25 @@ class OrderInfo extends \yii\db\ActiveRecord
         return false;
     }
 
+
+    /*取消订单*/
+    public function cancelOrder($order_id)
+    {
+        /*根据索引，取出对应的价格区间*/
+        $order_info = self::find()->where('order_id = :id', [':id' => $order_id])->one();
+        if(!empty($order_info)){
+            if($order_info->order_status > 1){
+                return false;
+            };
+            /*修改数据*/
+            $order_info->order_status = 3;
+            if($order_info->save(false)){
+                return true;
+            };
+        }
+        return false;
+    }
+
     /*
     产生唯一订单号
     $len        长度
