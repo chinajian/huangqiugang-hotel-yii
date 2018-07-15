@@ -16,11 +16,21 @@ class PayController extends Controller
 	public $layout = false;
     public $enableCsrfValidation = false;
     private $openId = '';
+
+    public function beforeAction($action)
+    {
+        header('Access-Control-Allow-Credentials:true');
+        header('Access-Control-Allow-Origin:http://m.ghchotel.com');
+        // header('Access-Control-Allow-Origin:http://10.9.87.104:3000');
+        header('Access-Control-Allow-Methods:POST,GET');
+        return true;
+    }
+    
     
     /*订单支付*/
     public function actionPayOrder()
     {
-        header('Access-Control-Allow-Origin:*');
+        // header('Access-Control-Allow-Origin:*');
         $user_id = MInfo::getUserid();
         $post = Yii::$app->request->post();
         // $post = array(
