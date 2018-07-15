@@ -142,9 +142,9 @@ class UserController extends BasicController
     {
         /*如果有数据*/
         $get = Yii::$app->request->get();
-        $get = array(
-            "order_id" => 1
-        );
+        // $get = array(
+        //     "order_id" => 1
+        // );
         // P($get);
         $order_id = (int)(isset($get['order_id'])?$get['order_id']:0);
         if(!$order_id){
