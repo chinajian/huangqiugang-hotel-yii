@@ -152,17 +152,20 @@ class UserController extends BasicController
             Yii::$app->end();
         }
         /*根据索引，取出对应的价格区间*/
-        $order_info = OrderInfo::find()->where('order_id = :id', [':id' => $order_id])->andWhere('user_id =' . MInfo::getUserid())->asArray()->one();
+        $order_info = OrderInfo::find()->joinWith('room')->where('order_id = :id', [':id' => $order_id])->andWhere('user_id =' . MInfo::getUserid())->asArray()->one();
         if(empty($order_info)){
             return Tools::showRes(10300, '没有此订单');
             Yii::$app->end();
         };
+
+        $order_info["room_name"] = $order_info["room"]["room_name"];
+        $order_info["arr"] = date("Y-m-d H:i:s", $order_info["arr"]);
+        $order_info["dep"] = date("Y-m-d H:i:s", $order_info["dep"]);
+        $order_info["add_time"] = date("Y-m-d H:i:s", $order_info["add_time"]);
         unset($order_info["user_id"]);
         unset($order_info["pay_id"]);
-        unset($order_info["add_time"]);
         unset($order_info["pay_time"]);
-        $order_info["arr"] = date("Y-m-d H:i:s");
-        $order_info["dep"] = date("Y-m-d H:i:s");
+        unset($order_info["room"]);
         // P($order_info);
         return Tools::showRes(0, $order_info);
     }

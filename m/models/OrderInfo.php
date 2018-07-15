@@ -88,5 +88,13 @@ class OrderInfo extends \yii\db\ActiveRecord
         $orderInfo = self::find()->where('order_sn = :sn', [':sn' => $order_sn])->one();
         return $orderInfo?$this->createOrderSn():$order_sn;  //如果商品货号重复则重新生成  
     }
+
+
+    /*关联查询 分类信息*/
+    public function getRoom()
+    {
+        $room = $this->hasOne(Room::className(), ['room_type' => 'rmtype'])->select(['room_type', 'room_name']);
+        return $room;
+    }
     
 }
