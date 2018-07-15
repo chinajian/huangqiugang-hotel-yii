@@ -177,8 +177,8 @@ class HotelController extends BasicController
             //     'date' => '2018-06-11',//入住时间
             //     'dayCount' => 1,//入住天数
             // );
-            // $ratecode = (isset($post['ratecode'])?$post['ratecode']:"");
-            $ratecode = 'MEM';
+            $ratecode = (isset($post['ratecode'])?$post['ratecode']:"");
+            // $ratecode = 'MEM';
             $rmtype = (isset($post['rmtype'])?$post['rmtype']:"");
             $date = (isset($post['date'])?$post['date']:date('Y-m-d', time()));
             $dayCount = (isset($post['dayCount'])?$post['dayCount']:1);
@@ -277,7 +277,7 @@ class HotelController extends BasicController
             // );
             $post['arr'] = $post['arr'].' 00:00:00';
             $post['dep'] = $post['dep'].' 23:59:59';
-            $post['rateCode'] = 'MEM';
+            // $post['rateCode'] = 'MEM';
             $rateCode = $post['rateCode'];
             $rmtype = isset($post['rmtype'])?$post['rmtype']:'';
             $dayCount = date('d', strtotime($post['dep'])) - date('d', strtotime($post['arr']));//入住天数
