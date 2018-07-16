@@ -20,8 +20,8 @@ class RoomController extends BasicController
     private $v = '3.0';
     private $format = 'json';
     private $local = 'zh_CN';
-    private $hotelGroupId = 2;
-    private $hotelId = 9;
+    private $hotelGroupId = 73;
+    private $hotelId = 94;
     private $sessionid = '';
 
     /*
@@ -86,11 +86,12 @@ class RoomController extends BasicController
         if ($curl->error) {
             echo 'Error: ' . $curl->errorCode . ': ' . $curl->errorMessage . "\n";
         } else {
-            // P(json_decode($curl->response));
+            // P($curl->response);
             $res = json_decode($curl->response);
             if($res->resultCode == 0 and !empty($res->result)){
                 $roomTypeList = $res->result;
                 foreach($roomTypeList as $k => $v){
+                    $roomDescript = $v->roomDescript;//得到描述
                     $roomType = $v->roomType;//得到房型
                     /*查看数据库中是否有此房型，如果有，则忽略，如果没有，需要添加一个*/
                     $roomModel = new Room;
@@ -98,6 +99,7 @@ class RoomController extends BasicController
                     if(empty($room)){
                         $data = array(
                             "Room" => array(
+                                "room_name" => $roomDescript,
                                 "room_type" => $roomType
                             )
                         );

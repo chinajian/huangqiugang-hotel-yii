@@ -20,8 +20,8 @@ class HotelController extends BasicController
     private $v = '3.0';
     private $format = 'json';
     private $local = 'zh_CN';
-    private $hotelGroupId = 2;
-    private $hotelId = 9;
+    private $hotelGroupId = 73;
+    private $hotelId = 94;
     private $sessionid = '';
 
     /*
@@ -229,9 +229,10 @@ class HotelController extends BasicController
             'adult' => $post['adult'],//人数
             'remark' => '',//备注
             'salesChannel' => '',//销售渠道
-            'src' => '',//来源
-            'market' => '',//市场
-            'channel' => '',//渠道
+            'src' => 'WEB',//来源
+            'rsvType' => '002',//预定类型   002 (现付订单)  007 (预付订单)
+            'market' => 'WEB',//市场
+            'channel' => 'WEB',//渠道
             'packages' => '',//包价
             'everyDayRate' => '',//每日房价
             'rsvManId' => '',//订房人id
