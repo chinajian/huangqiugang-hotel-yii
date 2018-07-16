@@ -133,7 +133,7 @@ class HotelController extends BasicController
             'date' => $date,//到店日期
             'dayCount' => $dayCount,//入住天数
             'cityCode' => 'HZZJ1',//城市代码（1-查询酒店信息接口中获取cityCode）
-            'rateCodes' => '',//指定房价码
+            'rateCodes' => 'WKI',//指定房价码
             'salesChannel' => 'WEB',//渠道代码
             'hotelIds' => $this->hotelId,
             'hotelGroupId' => $this->hotelGroupId,
