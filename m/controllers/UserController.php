@@ -43,7 +43,7 @@ class UserController extends BasicController
             }
         }
 
-        $user = User::find()->select(['phone', 'wechat_nickname', 'wechat_sex', 'wechat_headimgurl'])->where('user_id = :id', [':id' => $user_id])->asArray()->one();
+        $user = User::find()->select(['phone', 'wechat_nickname', 'wechat_sex', 'wechat_headimgurl', 'curr_integrals', 'pay_integrals'])->where('user_id = :id', [':id' => $user_id])->asArray()->one();
         $user['wechat_nickname'] = urldecode($user['wechat_nickname']);
         // P($user);
         return Tools::showRes(0, $user);

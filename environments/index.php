@@ -40,6 +40,8 @@ return [
             'greencloud/web/assets',
             'm/runtime',
             'm/web/assets',
+            'admin/runtime',
+            'admin/web/assets',
         ],
         'setExecutable' => [
             'yii',
@@ -50,6 +52,7 @@ return [
             'frontend/config/main-local.php',
             'greencloud/config/main-local.php',
             'm/config/main-local.php',
+            'admin/config/main-local.php',
         ],
     ],
     'Production' => [
@@ -63,6 +66,8 @@ return [
             'greencloud/web/assets',
             'm/runtime',
             'm/web/assets',
+            'admin/runtime',
+            'admin/web/assets',
         ],
         'setExecutable' => [
             'yii',
@@ -72,6 +77,7 @@ return [
             'frontend/config/main-local.php',
             'greencloud/config/main-local.php',
             'm/config/main-local.php',
+            'admin/config/main-local.php',
         ],
     ],
 ];
