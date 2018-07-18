@@ -12,6 +12,7 @@ return [
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'controllerNamespace' => 'www\controllers',
+    'defaultRoute' => 'site/index',//默认路由(没有写路由数据的情况下)
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-www',
