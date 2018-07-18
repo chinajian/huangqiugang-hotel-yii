@@ -177,6 +177,7 @@ class RoomController extends BasicController
             Yii::$app->end();
         }
         $room = Room::find()->where('room_id = :id', [':id' => $id])->asArray()->one();
+        $room['desc'] = Html::decode($room['desc']);
         if(!empty($room['albums'])){
             $room['albums'] = explode(',', $room['albums']);
         }else{
