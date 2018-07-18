@@ -158,22 +158,21 @@ class HotelController extends Controller
             if(!empty($roomList)){
                 foreach($roomList as $k => $v){
                     $roomList[$k]->info = $roomModel->getRoomInfo($v->rmtype);
-                };
-            }
-            foreach($roomList as $k => $v){
-                if(!empty($roomList[$k]->info["preview"])){
-                    $roomList[$k]->info["preview"] = SITE_ADMIN_URL.ltrim($roomList[$k]->info["preview"], "./");
-                    $tmpArr = explode('uploads', $roomList[$k]->info["preview"]);
-                    $roomList[$k]->info["preview"] = $tmpArr[0].'uploads'.Tools::getImgBySize($tmpArr[1], 'big');//mini图 转化成 预览图
-                }
-                if(!empty($roomList[$k]->info["album_img"])){
-                    $album_img_arr = explode(',', $roomList[$k]->info["album_img"]);
-                    foreach($album_img_arr as $k2 => $v2){
-                        $album_img_arr[$k2] = SITE_ADMIN_URL.ltrim($album_img_arr[$k2], "./");
-                        $tmpArr = explode('uploads', $album_img_arr[$k2]);
-                        $album_img_arr[$k2] = $tmpArr[0].'uploads'.Tools::getImgBySize($tmpArr[1], 'big');//mini图 转化成 预览图
-                    };
-                    $roomList[$k]->info["album_img"] = $album_img_arr;
+
+                    if(!empty($roomList[$k]->info["preview"])){
+                        $roomList[$k]->info["preview"] = SITE_ADMIN_URL.ltrim($roomList[$k]->info["preview"], "./");
+                        $tmpArr = explode('uploads', $roomList[$k]->info["preview"]);
+                        $roomList[$k]->info["preview"] = $tmpArr[0].'uploads'.Tools::getImgBySize($tmpArr[1], 'big');//mini图 转化成 预览图
+                    }
+                    if(!empty($roomList[$k]->info["album_img"])){
+                        $album_img_arr = explode(',', $roomList[$k]->info["album_img"]);
+                        foreach($album_img_arr as $k2 => $v2){
+                            $album_img_arr[$k2] = SITE_ADMIN_URL.ltrim($album_img_arr[$k2], "./");
+                            $tmpArr = explode('uploads', $album_img_arr[$k2]);
+                            $album_img_arr[$k2] = $tmpArr[0].'uploads'.Tools::getImgBySize($tmpArr[1], 'big');//mini图 转化成 预览图
+                        };
+                        $roomList[$k]->info["album_img"] = $album_img_arr;
+                    }
                 }
             };
             // P($roomList);
@@ -185,7 +184,8 @@ class HotelController extends Controller
                 }
             }else{
                 return $this->renderFile('./pc-view/dist/order.html.php', [
-                    "roomList" => $roomList
+                    "roomList" => $roomList,
+                    "date" => $date
                 ]);
             }
         }
@@ -197,6 +197,8 @@ class HotelController extends Controller
         if(Yii::$app->request->isPost){
             $post = Yii::$app->request->post();
         };
+        $ratecode = $this->ratecode;
+        // P($ratecode);
         if(empty($ratecode)){
             $ratecode = (isset($post['ratecode'])?$post['ratecode']:"");
         };
@@ -211,7 +213,7 @@ class HotelController extends Controller
             return Tools::showRes(10300, '参数有误！');
             Yii::$app->end();
         };
-        $res = json_decode($this->actionQueryHotelList($date, $dayCount));
+        $res = json_decode($this->actionQueryHotelList($date, $dayCount, 1));
         if($res->code == 0){
             $roomList = $res->msg;
         }else{
@@ -228,7 +230,10 @@ class HotelController extends Controller
             }
         }
         // P($room);
-        return Tools::showRes(0, $room);
+        return $this->renderFile('./pc-view/dist/order_detail.html.php', [
+            'room' => $room,
+            'date' => $date,
+        ]);
     }
     
     /*2.7-创建订单*/
