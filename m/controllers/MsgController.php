@@ -19,14 +19,17 @@ class MsgController extends Controller
     public function beforeAction($action)
     {
         header('Access-Control-Allow-Credentials:true');
-        header('Access-Control-Allow-Origin:http://m.ghchotel.com');
+        header('Access-Control-Allow-Origin:http://www.ghchotel.com');
         // header('Access-Control-Allow-Origin:http://10.9.87.104:3000');
         header('Access-Control-Allow-Methods:POST,GET');
         return true;
     }
 
-    /*发送注册验证短信*/
-    public function actionSendReg()
+    /*
+    发送注册验证短信
+    $type 1-注册绑定 2-PC登录
+    */
+    public function actionSendReg($type = 1)
     {
         if(Yii::$app->request->isPost){
         // if(1){
