@@ -115,6 +115,7 @@ class HotelController extends Controller
     */
     public function actionQueryHotelList($date = '', $dayCount = 1, $self = 0)
     {
+        $actionName = $this->action->id;//方法名
         if(Yii::$app->request->isPost){
             $post = Yii::$app->request->post();
             $date = isset($post['date'])?$post['date']:'';
@@ -185,7 +186,8 @@ class HotelController extends Controller
             }else{
                 return $this->renderFile('./pc-view/dist/order.html.php', [
                     "roomList" => $roomList,
-                    "date" => $date
+                    "date" => $date,
+                    'actionName' => $actionName
                 ]);
             }
         }

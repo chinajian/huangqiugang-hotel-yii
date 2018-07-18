@@ -49,63 +49,6 @@ class UserController extends BasicController
         return Tools::showRes(0, $user);
     }
 
-    /*微信账号 绑定 手机号*/
-    public function actionBinding()
-    {
-        $user_id = WwwInfo::getUserid();
-        echo $user_id;
-        if(Yii::$app->request->isPost){
-        // if(1){
-            $post = Yii::$app->request->post();
-            // $post = array(
-            //     'User' => array(
-            //         'phone' => '13915028703',
-            //         'password' => '123456',
-            //         'code' => '8417',
-            //     )
-            // );
-            // P($post);
-            if(!isset($post['User']['code']) or empty($post['User']['code'])){
-                return Tools::showRes(10300, '参数有误！');
-                Yii::$app->end();
-            }
-            /*验证短信码*/
-            $msg = Msg::find()->where('mobile = :phone and type = 1 and code = :code and is_use = 0', [':phone' => $post['User']['phone'], ':code' => $post['User']['code']])->one();
-            if(empty($msg)){
-                return Tools::showRes(10502, '无效的验证码');
-                Yii::$app->end();
-            }
-            $time = time() - 5*60;//5分钟内有效
-            if($time > $msg['send_time']){
-                return Tools::showRes(10503, '此验证码已过期');
-                Yii::$app->end();
-            }
-            $userModel = new User;
-
-            $transaction = Yii::$app->db->beginTransaction();//事物处理
-            try{
-                /*绑定会员*/
-                if(!$userModel->modUser($post, $user_id, 'binding')){
-                    if($userModel->hasErrors()){
-                        return Tools::showRes(10100, $userModel->getErrors());
-                    }else{
-                        return Tools::showRes(-1);
-                    }
-                }
-
-                /*验证码更改为已使用*/
-                $msg->is_use = 1;
-                $msg->save(false);
-
-                $transaction->commit();
-                return Tools::showRes();
-            }catch(\Exception $e){
-                $transaction->rollback();
-                return Tools::showRes(10200, '异常信息：'.$e->getMessage().'异常文件：'.$e->getFile().'异常所在行：'.$e->getLine().'异常码：'.$e->getCode());
-            };
-        }
-    }
-
     /*
     我的订单
     $status     订单状态 空-全部 1未付款, 2已付款, 3已取消, 4-待入住, 5-待评价, 6-完成

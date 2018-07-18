@@ -7,6 +7,8 @@ use app\models\Article;
 use app\models\ArticleCategory;
 use app\models\Business;
 use app\models\Activity;
+use app\models\User;
+use app\models\Msg;
 use libs\Tools;
 use libs\Page;
 use yii\helpers\Html;
@@ -14,6 +16,8 @@ use yii\helpers\Html;
 
 class SiteController extends Controller
 {
+    public $enableCsrfValidation = false;
+
     /*首页*/
     public function actionIndex()
     {
@@ -84,36 +88,85 @@ class SiteController extends Controller
     /*登录*/
     public function actionLogin()
     {
+        if(Yii::$app->request->isPost){
+            return Tools::showRes(300, '登录失败');
+            $post = Yii::$app->request->post();
+            $phone = isset($post['account'])?$post['account']:"";
+            $password = isset($post['password'])?md5($post['password']):"";
+            $code = isset($post['code'])?$post['code']:"";
+            
+            if(empty($phone) or empty($password) or empty($code)){
+                return Tools::showRes(300, "参数有误！");
+            };
+
+            // echo $phone.'-'.$code;
+            /*验证 验证码*/
+            $msg = Msg::find()->where('mobile = :phone and type = 2 and code = :code and is_use = 0', [':phone' => $phone, ':code' => $code])->one();
+            if(empty($msg)){
+                return Tools::showRes(10502, '无效的验证码');
+                Yii::$app->end();
+            }
+            $time = time() - 5*60;//5分钟内有效
+            if($time > $msg['send_time']){
+                return Tools::showRes(10503, '此验证码已过期');
+                Yii::$app->end();
+            }
+
+            $userModel = new User;
+            if($userModel->login($post)){
+                return Tools::showRes(200, '登录成功');
+                Yii::$app->end();
+            }else{
+                if($userModel->hasErrors()){
+                    return Tools::showRes(300, $userModel->getErrors());
+                }
+            }
+            return Tools::showRes(300, '登录失败');
+        }
+        $this->layout = false;
         return $this->renderFile('./pc-view/dist/login.html.php');
     }
 
     /*品牌介绍*/
     public function actionIntro()
     {
-        return $this->renderFile('./pc-view/dist/about_intro.html.php');
+        $actionName = $this->action->id;//方法名
+        return $this->renderFile('./pc-view/dist/about_intro.html.php', [
+            'actionName' => $actionName
+        ]);
     }
 
     /*品牌故事*/
     public function actionStory()
     {
-        return $this->renderFile('./pc-view/dist/about_story.html.php');
+        $actionName = $this->action->id;//方法名
+        return $this->renderFile('./pc-view/dist/about_story.html.php', [
+            'actionName' => $actionName
+        ]);
     }
 
     /*24小时*/
     public function actionHour()
     {
-        return $this->renderFile('./pc-view/dist/24h.html.php');
+        $actionName = $this->action->id;//方法名
+        return $this->renderFile('./pc-view/dist/24h.html.php', [
+            'actionName' => $actionName
+        ]);
     }
 
     /*通用设施*/
     public function actionCommon()
     {
-        return $this->renderFile('./pc-view/dist/service_common.html.php');
+        $actionName = $this->action->id;//方法名
+        return $this->renderFile('./pc-view/dist/service_common.html.php', [
+            'actionName' => $actionName
+        ]);
     }
 
     /*商务中心*/
     public function actionBusiness()
     {
+        $actionName = $this->action->id;//方法名
         $get = Yii::$app->request->get();
         if(isset($get['page'])){
             $currPage = (int)$get['page']?$get['page']:1;
@@ -135,6 +188,7 @@ class SiteController extends Controller
         // P($businessList);
         return $this->renderFile('./pc-view/dist/service_business.html.php', [
             'businessList' => $businessList,
+            'actionName' => $actionName,
             'pageInfo' => [
                 'count' => $count,
                 'currPage' => $currPage,
@@ -147,13 +201,19 @@ class SiteController extends Controller
     /*酒店设施*/
     public function actionHotel()
     {
-        return $this->renderFile('./pc-view/dist/service_hotel.html.php');
+        $actionName = $this->action->id;//方法名
+        return $this->renderFile('./pc-view/dist/service_hotel.html.php', [
+            'actionName' => $actionName
+        ]);
     }
 
     /*服务项目*/
     public function actionProject()
     {
-        return $this->renderFile('./pc-view/dist/service_project.html.php');
+        $actionName = $this->action->id;//方法名
+        return $this->renderFile('./pc-view/dist/service_project.html.php', [
+            'actionName' => $actionName
+        ]);
     }
 
     /*在线预订*/
@@ -171,6 +231,7 @@ class SiteController extends Controller
     /*精彩活动*/
     public function actionEvent()
     {
+        $actionName = $this->action->id;//方法名
         $get = Yii::$app->request->get();
         if(isset($get['page'])){
             $currPage = (int)$get['page']?$get['page']:1;
@@ -195,6 +256,7 @@ class SiteController extends Controller
         return $this->renderFile('./pc-view/dist/event.html.php', [
             'activityList' => $activityList,
             'pageInfo' => $pageInfo,
+            'actionName' => $actionName,
             // 'pageInfo' => [
             //     'count' => $count,
             //     'currPage' => $currPage,
@@ -207,6 +269,7 @@ class SiteController extends Controller
     /*精彩活动 - 详情*/
     public function actionEventDetail()
     {
+        $actionName = $this->action->id;//方法名
         $get = Yii::$app->request->get();
         $id = (int)(isset($get['id'])?$get['id']:0);
         if(!$id){
@@ -229,7 +292,8 @@ class SiteController extends Controller
 
         // P($activity);
         return $this->renderFile('./pc-view/dist/event_detail.html.php', [
-            'activity' => $activity
+            'activity' => $activity,
+            'actionName' => $actionName
         ]);
     }
 
@@ -239,6 +303,7 @@ class SiteController extends Controller
      */
     public function actionRecommend()
     {
+        $actionName = $this->action->id;//方法名
         $get = Yii::$app->request->get();
         if(isset($get['page'])){
             $currPage = (int)$get['page']?$get['page']:1;
@@ -274,6 +339,7 @@ class SiteController extends Controller
             'articleList' => $articleList,
             'active' => $catid,
             'pageInfo' => $pageInfo,
+            'actionName' => $actionName,
             // 'pageInfo' => [
             //     'count' => $count,
             //     'currPage' => $currPage,
@@ -331,7 +397,10 @@ class SiteController extends Controller
     /*联系我们*/
     public function actionContact()
     {
-        return $this->renderFile('./pc-view/dist/contact.html.php');
+        $actionName = $this->action->id;//方法名
+        return $this->renderFile('./pc-view/dist/contact.html.php', [
+            'actionName' => $actionName
+        ]);
     }
 
 }
