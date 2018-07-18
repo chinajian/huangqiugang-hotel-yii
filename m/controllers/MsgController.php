@@ -86,7 +86,7 @@ class MsgController extends Controller
                         'status' => (string)$curl->response->status,
                         'desc' => $curl->response->desc,
                         'is_use' => 0,
-                        'type' => 1,//注册验证码
+                        'type' => $type,//注册验证码
                     )
                 );
                 $msgModel = new Msg;
