@@ -6,7 +6,9 @@ use yii\web\Controller;
 use app\models\Article;
 use app\models\ArticleCategory;
 use app\models\Business;
+use app\models\Activity;
 use libs\Tools;
+use libs\Page;
 use yii\helpers\Html;
 
 
@@ -108,13 +110,66 @@ class SiteController extends Controller
     /*精彩活动*/
     public function actionEvent()
     {
-        return $this->renderFile('./pc-view/dist/event.html.php');
+        $get = Yii::$app->request->get();
+        if(isset($get['page'])){
+            $currPage = (int)$get['page']?$get['page']:1;
+        }else{
+            $currPage = 1;
+        }
+        $activityModel = Activity::find();
+        $count = $activityModel->count();
+        $pageSize = Yii::$app->params['pageSize'];
+        $activityList = $activityModel->offset($pageSize*($currPage-1))->limit($pageSize)->asArray()->all();
+        foreach($activityList as $k => $v){
+            if(!empty($activityList[$k]['thumb'])){
+                $activityList[$k]['thumb'] = SITE_ADMIN_URL.ltrim($activityList[$k]['thumb'], "./");
+                $tmpArr = explode('uploads', $activityList[$k]['thumb']);
+                $activityList[$k]['thumb'] = $tmpArr[0].'uploads'.Tools::getImgBySize($tmpArr[1]);//mini图 转化成 预览图
+            };
+        }
+        // P($activityList);
+        $page = new Page($count, $pageSize);
+        $pageInfo = $page->fpage(array(4, 5, 6));
+
+        return $this->renderFile('./pc-view/dist/event.html.php', [
+            'activityList' => $activityList,
+            'pageInfo' => $pageInfo,
+            // 'pageInfo' => [
+            //     'count' => $count,
+            //     'currPage' => $currPage,
+            //     'pageSize' => $pageSize,
+            //     'totalPage' => ceil($count/$pageSize),
+            // ]
+        ]);
     }
 
     /*精彩活动 - 详情*/
     public function actionEventDetail()
     {
-        return $this->renderFile('./pc-view/dist/event_detail.html.php');
+        $get = Yii::$app->request->get();
+        $id = (int)(isset($get['id'])?$get['id']:0);
+        if(!$id){
+            return Tools::showRes(300, '参数有误！');
+            Yii::$app->end();
+        }
+        $activity = Activity::find()->where('id = :id', [':id' => $id])->asArray()->one();
+        $activity['content'] = Html::decode($activity['content']);
+
+        if(!empty($activity['thumb'])){
+            $activity['thumb'] = SITE_ADMIN_URL.ltrim($activity['thumb'], "./");
+            $tmpArr = explode('uploads', $activity['thumb']);
+            $activity['thumb'] = $tmpArr[0].'uploads'.Tools::getImgBySize($tmpArr[1], 'big');//mini图 转化成 预览图
+            $activity['thumb'] = [$activity['thumb']];
+        }
+
+        if(!empty($activity['author'])){
+            $activity['author'] = explode(" ", $activity['author']);
+        };
+
+        // P($activity);
+        return $this->renderFile('./pc-view/dist/event_detail.html.php', [
+            'activity' => $activity
+        ]);
     }
 
 
@@ -151,15 +206,19 @@ class SiteController extends Controller
 
         }
         // P($articleList);
+        $page = new Page($count, $pageSize);
+        $pageInfo = $page->fpage(array(4, 5, 6));
+
         return $this->renderFile('./pc-view/dist/recommend.html.php', [
             'articleList' => $articleList,
             'active' => $catid,
-            'pageInfo' => [
-                'count' => $count,
-                'currPage' => $currPage,
-                'pageSize' => $pageSize,
-                'totalPage' => ($pageSize>0)?ceil($count/$pageSize):0,
-            ]
+            'pageInfo' => $pageInfo,
+            // 'pageInfo' => [
+            //     'count' => $count,
+            //     'currPage' => $currPage,
+            //     'pageSize' => $pageSize,
+            //     'totalPage' => ($pageSize>0)?ceil($count/$pageSize):0,
+            // ]
         ]);
     }
 
