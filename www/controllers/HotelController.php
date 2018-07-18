@@ -160,6 +160,13 @@ class HotelController extends Controller
                     $roomList[$k]->info = $roomModel->getRoomInfo($v->rmtype);
                 };
             }
+            foreach($roomList as $k => $v){
+                if(!empty($roomList[$k]->info["preview"])){
+                    $roomList[$k]->info["preview"] = SITE_ADMIN_URL.ltrim($roomList[$k]->info["preview"], "./");
+                    $tmpArr = explode('uploads', $roomList[$k]->info["preview"]);
+                    $roomList[$k]->info["preview"] = $tmpArr[0].'uploads'.Tools::getImgBySize($tmpArr[1]);//mini图 转化成 预览图
+                }
+            };
             // P($roomList);
             if($self){
                 if(empty($roomList)){

@@ -17,7 +17,19 @@ class SiteController extends Controller
     /*首页*/
     public function actionIndex()
     {
-        return $this->renderFile('./pc-view/dist/index.html.php');
+        $activityModel = Activity::find();
+        $activityList = $activityModel->asArray()->all();
+        foreach($activityList as $k => $v){
+            if(!empty($activityList[$k]['thumb'])){
+                $activityList[$k]['thumb'] = SITE_ADMIN_URL.ltrim($activityList[$k]['thumb'], "./");
+                $tmpArr = explode('uploads', $activityList[$k]['thumb']);
+                $activityList[$k]['thumb'] = $tmpArr[0].'uploads'.Tools::getImgBySize($tmpArr[1]);//mini图 转化成 预览图
+            };
+        }
+        // P($activityList);
+        return $this->renderFile('./pc-view/dist/index.html.php', [
+            'activityList' => $activityList
+        ]);
     }
 
     /*登录*/
