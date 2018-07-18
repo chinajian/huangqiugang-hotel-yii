@@ -42,6 +42,22 @@
         </div>
     </div>
     <div class="form-group">
+        <label for="album_img" class="col-sm-2 control-label">相册列表</label>
+        <div class="col-sm-9">
+            <ul class="upload" id="upload">
+                <?php 
+                    $i = 0;
+                    foreach($room['album_img'] as $k => $v){
+                ?>
+                    <li class="full"><img src="<?php echo $v?>"><span class="del-img"></span></li>
+                <?php $i++;}?>
+                <?php for($j=0; $j<(10-$i); $j++){?>
+                    <li class="empty"></li>
+                <?php }?>
+            </ul>
+        </div>
+    </div>
+    <div class="form-group">
         <label for="room_type" class="col-sm-2 control-label">房型</label>
         <div class="col-sm-9">
             <input type="text" class="form-control input-sm" name="Room[room_type]" id="room_type" placeholder="房型" readonly value="<?php echo $room['room_type']?>">
@@ -166,6 +182,12 @@
 
     /*修改*/
     $("#mod").click(function(){
+        /*相册图片，循环出一个input列表>>>*/
+            $('#upload').nextAll().remove();
+            $('#upload').find('.full').each(function(){
+                $('#upload').parent().append(`<input type="hidden" name="Room[album_img][]" value="`+ $(this).find('img').attr('src') +`">`);
+            })
+        /*相册图片，循环出一个input列表<<<*/
         jajax("<?php echo Url::to(['room/mod-room'])?>", $('#modForm').serialize());
     })
 </script>

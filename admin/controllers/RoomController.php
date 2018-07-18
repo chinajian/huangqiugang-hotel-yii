@@ -179,10 +179,10 @@ class RoomController extends BasicController
         }
         $room = Room::find()->where('room_id = :id', [':id' => $id])->asArray()->one();
         $room['desc'] = Html::decode($room['desc']);
-        if(!empty($room['albums'])){
-            $room['albums'] = explode(',', $room['albums']);
+        if(!empty($room['album_img'])){
+            $room['album_img'] = explode(',', $room['album_img']);
         }else{
-            $room['albums'] = [];
+            $room['album_img'] = [];
         }
         // P($room);
 

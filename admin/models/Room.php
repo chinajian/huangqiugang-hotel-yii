@@ -52,6 +52,13 @@ class Room extends \yii\db\ActiveRecord
         if(isset($data['Room']['desc']) and !empty($data['Room']['desc'])){
             $data['Room']['desc'] = Html::encode($data['Room']['desc']);
         }
+        if(isset($data['Room']['album_img']) and !empty($data['Room']['album_img'])){
+            $data['Room']['album_img'] = implode(',', $data['Room']['album_img']);
+        }else{
+            $data['Room']['album_img'] = '';
+        }
+        
+        // P($data);
         
         if($this->load($data) and $this->validate()){
             $room = self::find()->where('room_id = :uid', [':uid' => $id])->one();
