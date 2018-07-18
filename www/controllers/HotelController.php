@@ -167,7 +167,7 @@ class HotelController extends Controller
                     $roomList[$k]->info["preview"] = $tmpArr[0].'uploads'.Tools::getImgBySize($tmpArr[1]);//mini图 转化成 预览图
                 }
             };
-            // P($roomList);
+            P($roomList);
             if($self){
                 if(empty($roomList)){
                     return Tools::showRes(0, []);
