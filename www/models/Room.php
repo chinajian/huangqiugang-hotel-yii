@@ -32,7 +32,7 @@ class Room extends \yii\db\ActiveRecord
     */
     public function getRoomInfo($room_type)
     {
-        $info = self::find()->select(['room_name', 'room_type', 'acreage', 'floor', 'bed_type', 'preview', 'album_img', 'desc'])->where('room_type = :room_type', [':room_type' => $room_type])->asArray()->one();
+        $info = self::find()->select(['room_name', 'room_type', 'acreage', 'floor', 'bed_type', 'preview', 'album_img', 'description', 'desc'])->where('room_type = :room_type', [':room_type' => $room_type])->asArray()->one();
         return $info;
     }
 

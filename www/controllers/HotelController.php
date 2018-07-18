@@ -164,10 +164,19 @@ class HotelController extends Controller
                 if(!empty($roomList[$k]->info["preview"])){
                     $roomList[$k]->info["preview"] = SITE_ADMIN_URL.ltrim($roomList[$k]->info["preview"], "./");
                     $tmpArr = explode('uploads', $roomList[$k]->info["preview"]);
-                    $roomList[$k]->info["preview"] = $tmpArr[0].'uploads'.Tools::getImgBySize($tmpArr[1]);//mini图 转化成 预览图
+                    $roomList[$k]->info["preview"] = $tmpArr[0].'uploads'.Tools::getImgBySize($tmpArr[1], 'big');//mini图 转化成 预览图
+                }
+                if(!empty($roomList[$k]->info["album_img"])){
+                    $album_img_arr = explode(',', $roomList[$k]->info["album_img"]);
+                    foreach($album_img_arr as $k2 => $v2){
+                        $album_img_arr[$k2] = SITE_ADMIN_URL.ltrim($album_img_arr[$k2], "./");
+                        $tmpArr = explode('uploads', $album_img_arr[$k2]);
+                        $album_img_arr[$k2] = $tmpArr[0].'uploads'.Tools::getImgBySize($tmpArr[1], 'big');//mini图 转化成 预览图
+                    };
+                    $roomList[$k]->info["album_img"] = $album_img_arr;
                 }
             };
-            P($roomList);
+            // P($roomList);
             if($self){
                 if(empty($roomList)){
                     return Tools::showRes(0, []);
