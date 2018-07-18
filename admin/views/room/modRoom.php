@@ -66,6 +66,12 @@
         </div>
     </div>
     <div class="form-group">
+        <label for="description" class="col-sm-2 control-label">描述</label>
+        <div class="col-sm-9">
+            <textarea class="form-control" name="Room[description]" id="description" rows="2"><?php echo $room['description']?></textarea>
+        </div>
+    </div>
+    <div class="form-group">
         <label for="desc" class="col-sm-2 control-label">内容</label>
         <div class="col-sm-9">
             <script class="editor" id="desc" name="Room[desc]" type="text/plain" style="height: 250px;"><?php echo $room['desc']?></script>

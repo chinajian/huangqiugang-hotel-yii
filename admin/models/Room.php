@@ -25,7 +25,8 @@ class Room extends \yii\db\ActiveRecord
             ['bed_type', 'string', 'max' => 16],
             ['preview', 'string', 'max' => 256],
             ['album_img', 'string', 'max' => 1024],
-            ['desc', 'string', 'max' => 512],
+            ['description', 'string', 'max' => 256],
+            ['desc', 'required', 'message' => '内容不能为空'],
         ];
     }
 
@@ -64,6 +65,7 @@ class Room extends \yii\db\ActiveRecord
             $room->bed_type = $data['Room']['bed_type'];
             $room->preview = $data['Room']['preview']?$data['Room']['preview']:"";
             $room->album_img = $data['Room']['album_img']?$data['Room']['album_img']:"";
+            $room->description = $data['Room']['description'];
             $room->desc = $data['Room']['desc'];
             if($room->save(false)){
                 /*写入日志*/
