@@ -17,8 +17,52 @@ class SiteController extends Controller
     /*首页*/
     public function actionIndex()
     {
+        /*周边推荐  B*/
+        $articleModel = Article::find();
+        /*游乐*/
+        $articleList1 = $articleModel->with('articleCategory')->where("cat_id=1")->offset(0)->limit(2)->asArray()->all();
+        foreach($articleList1 as $k => $v){
+            if(!empty($articleList1[$k]['thumb'])){
+                $articleList1[$k]['thumb'] = SITE_ADMIN_URL.ltrim($articleList1[$k]['thumb'], "./");
+                $tmpArr = explode('uploads', $articleList1[$k]['thumb']);
+                $articleList1[$k]['thumb'] = $tmpArr[0].'uploads'.Tools::getImgBySize($tmpArr[1], 'big');//mini图 转化成 预览图
+            };
+        }
+        /*餐饮*/
+        $articleList2 = $articleModel->with('articleCategory')->where("cat_id=2")->offset(0)->limit(2)->asArray()->all();
+        foreach($articleList2 as $k => $v){
+            if(!empty($articleList2[$k]['thumb'])){
+                $articleList2[$k]['thumb'] = SITE_ADMIN_URL.ltrim($articleList2[$k]['thumb'], "./");
+                $tmpArr = explode('uploads', $articleList2[$k]['thumb']);
+                $articleList2[$k]['thumb'] = $tmpArr[0].'uploads'.Tools::getImgBySize($tmpArr[1], 'big');//mini图 转化成 预览图
+            };
+        }
+        /*购物*/
+        $articleList3 = $articleModel->with('articleCategory')->where("cat_id=3")->offset(0)->limit(2)->asArray()->all();
+        foreach($articleList3 as $k => $v){
+            if(!empty($articleList3[$k]['thumb'])){
+                $articleList3[$k]['thumb'] = SITE_ADMIN_URL.ltrim($articleList3[$k]['thumb'], "./");
+                $tmpArr = explode('uploads', $articleList3[$k]['thumb']);
+                $articleList3[$k]['thumb'] = $tmpArr[0].'uploads'.Tools::getImgBySize($tmpArr[1], 'big');//mini图 转化成 预览图
+            };
+        }
+        /*演绎*/
+        $articleList4 = $articleModel->with('articleCategory')->where("cat_id=4")->offset(0)->limit(2)->asArray()->all();
+        foreach($articleList4 as $k => $v){
+            if(!empty($articleList4[$k]['thumb'])){
+                $articleList4[$k]['thumb'] = SITE_ADMIN_URL.ltrim($articleList4[$k]['thumb'], "./");
+                $tmpArr = explode('uploads', $articleList4[$k]['thumb']);
+                $articleList4[$k]['thumb'] = $tmpArr[0].'uploads'.Tools::getImgBySize($tmpArr[1], 'big');//mini图 转化成 预览图
+            };
+        }
+        // P($articleList4);
+
+
+        /*周边推荐  E*/
+        
+        /*精彩活动 B*/
         $activityModel = Activity::find();
-        $activityList = $activityModel->asArray()->all();
+        $activityList = $activityModel->offset(0)->limit(5)->asArray()->all();
         foreach($activityList as $k => $v){
             if(!empty($activityList[$k]['thumb'])){
                 $activityList[$k]['thumb'] = SITE_ADMIN_URL.ltrim($activityList[$k]['thumb'], "./");
@@ -27,8 +71,13 @@ class SiteController extends Controller
             };
         }
         // P($activityList);
+        /*精彩活动 E*/
         return $this->renderFile('./pc-view/dist/index.html.php', [
-            'activityList' => $activityList
+            'articleList1' => $articleList1,
+            'articleList2' => $articleList2,
+            'articleList3' => $articleList3,
+            'articleList4' => $articleList4,
+            'activityList' => $activityList,
         ]);
     }
 
