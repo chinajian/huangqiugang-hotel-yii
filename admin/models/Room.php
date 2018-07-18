@@ -22,7 +22,7 @@ class Room extends \yii\db\ActiveRecord
             ['room_type', 'string', 'max' => 32],
             ['acreage', 'string', 'max' => 16],
             ['floor', 'string', 'max' => 16],
-            ['bed_type', 'string', 'max' => 16],
+            ['bed_type', 'string', 'max' => 32],
             ['preview', 'string', 'max' => 256],
             ['album_img', 'string', 'max' => 1024],
             ['description', 'string', 'max' => 256],
