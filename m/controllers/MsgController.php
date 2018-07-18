@@ -18,11 +18,21 @@ class MsgController extends Controller
 
     public function beforeAction($action)
     {
-        header('Access-Control-Allow-Credentials:true');
-        header('Access-Control-Allow-Origin:*');
+        $origin = isset($_SERVER['HTTP_ORIGIN'])? $_SERVER['HTTP_ORIGIN'] : '';
+        $allow_origin = array(  
+            'http://www.ghchotel.com',  
+            'http://m.ghchotel.com'  
+        );
+        if(in_array($origin, $allow_origin)){  
+            header('Access-Control-Allow-Origin:'.$origin);  
+            header('Access-Control-Allow-Methods:POST,GET'); 
+            header('Access-Control-Allow-Credentials:true'); 
+        } 
+        // header('Access-Control-Allow-Credentials:true');
+        // header('Access-Control-Allow-Origin:http://www.ghchotel.com');
         // header('Access-Control-Allow-Origin:http://m.ghchotel.com');
         // header('Access-Control-Allow-Origin:http://10.9.87.104:3000');
-        header('Access-Control-Allow-Methods:POST,GET');
+        // header('Access-Control-Allow-Methods:POST,GET');
         return true;
     }
 
