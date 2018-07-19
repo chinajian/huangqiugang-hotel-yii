@@ -374,9 +374,16 @@ class SiteController extends Controller
 
         if(!empty($article['content'])){
             $article['content'] = Html::decode($article['content']);
-        }
-        if(!empty($nextArticle['content'])){
-            $nextArticle['content'] = Html::decode($nextArticle['content']);
+            
+            $tmp = explode("./uploads", $article['content']);
+            if(count($tmp) > 1){
+                $article['content'] = $tmp[0];
+                foreach($tmp as $k => $v){
+                    if($k){
+                        $article['content'] .= SITE_ADMIN_URL."/uploads/".$v;
+                    }
+                }
+            }
         }
 
         if(!empty($article['thumb'])){
