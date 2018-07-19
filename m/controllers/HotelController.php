@@ -3,6 +3,7 @@
 namespace m\controllers;
 
 use Yii;
+use yii\helpers\Html;
 use m\controllers\BasicController;
 use app\models\User;
 use app\models\Room;
