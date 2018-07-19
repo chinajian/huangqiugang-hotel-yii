@@ -25,7 +25,7 @@ class RoomController extends BasicController
         $roomModel = Room::find();
         $count = $roomModel->count();
         $pageSize = Yii::$app->params['pageSize'];
-        $roomList = $roomModel->select(['room_name', 'rate1', 'adv_min', 'adv_max', 'stay_min', 'stay_max', 'preview', 'desc',])->offset($pageSize*($currPage-1))->limit($pageSize)->asArray()->all();
+        $roomList = $roomModel->select(['room_name', 'rate1', 'adv_min', 'adv_max', 'stay_min', 'stay_max', 'preview', 'description', 'desc',])->offset($pageSize*($currPage-1))->limit($pageSize)->asArray()->all();
         // P($roomList);
         return Tools::showRes(0, $roomList);
     }
