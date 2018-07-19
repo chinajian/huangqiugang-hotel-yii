@@ -80,6 +80,12 @@ class UserController extends BasicController
                 Yii::$app->end();
             }
             $userModel = new User;
+            /*查看手机号是否已经存在*/
+            $user = $userModel::find()->where(["phone=:phone" => [":phone" => $phone]])->one();
+            if(empty($user)){
+                 return Tools::showRes(10504, '手机号不能重复');
+                Yii::$app->end();
+            }
 
             $transaction = Yii::$app->db->beginTransaction();//事物处理
             try{
