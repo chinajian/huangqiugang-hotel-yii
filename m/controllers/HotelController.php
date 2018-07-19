@@ -154,6 +154,16 @@ class HotelController extends BasicController
             if(!empty($roomList)){
                 foreach($roomList as $k => $v){
                     $roomList[$k]->info = $roomModel->getRoomInfo($v->rmtype);
+
+                    if(!empty($roomList[$k]->info["preview"])){
+                        $roomList[$k]->info["preview"] = SITE_ADMIN_URL.ltrim($roomList[$k]->info["preview"], "./");
+                        $tmpArr = explode('uploads', $roomList[$k]->info["preview"]);
+                        $roomList[$k]->info["preview"] = $tmpArr[0].'uploads'.Tools::getImgBySize($tmpArr[1], 'big');//mini图 转化成 预览图
+                    };
+
+                    if(!empty($roomList[$k]->info["desc"])){
+                        $roomList[$k]->info["desc"] = Html::decode($roomList[$k]->info["desc"]);
+                    };
                 };
             }
             // P($roomList);
