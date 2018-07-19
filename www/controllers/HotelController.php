@@ -105,7 +105,8 @@ class HotelController extends Controller
         if ($curl->error) {
             echo 'Error: ' . $curl->errorCode . ': ' . $curl->errorMessage . "\n";
         } else {
-            P(json_decode($curl->response));
+            // P(json_decode($curl->response));
+            return json_decode($curl->response);
         }
     }
 
@@ -184,10 +185,15 @@ class HotelController extends Controller
                     return Tools::showRes(0, $roomList);
                 }
             }else{
+                /*取出所有房型*/
+                $rmtypeList = $this->actionRoomList()->result;
+                // P($roomList);
+
                 return $this->renderFile('./pc-view/dist/order.html.php', [
                     "roomList" => $roomList,
                     "date" => $date,
-                    'actionName' => $actionName
+                    'actionName' => $actionName,
+                    'rmtypeList' => $rmtypeList
                 ]);
             }
         }

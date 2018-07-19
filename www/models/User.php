@@ -91,23 +91,20 @@ class User extends \yii\db\ActiveRecord
 
     /*
     验证登录
-    $data   如果是已经关注的账号，可以返回头像等数据，如果没有关注，$userinfo是错误信息
+    $phone  手机号
+    $password   密码   
     */
-    public function login($data)
+    public function login($phone, $password)
     {
-        $openid = $data['User']['wechat_openid'];
-        $user = self::find()->where(['wechat_openid' => $openid])->one();
+        $user = self::find()->where(['phone' => $phone, 'password' => $password])->one();
         // P($user);
-        if(empty($user) && (isset($data['User']['regby']) && $data['User']['regby'] == 3)){//没有找到此会员，并且是微信过来的，需要增加一个会员
-            /*新增会员*/
-            if($this->addUser($data)){
-                return true;
-            }
+        if(empty($user)){//没有找到此会员
+            return false;
         }else{
             /*更新最后登录时间 和 登录次数*/
-            $this->updateAll(['last_ip' => ip2long(Yii::$app->request->userIP), 'last_login_time' => time()], 'wechat_openid = :openid', [':openid' => $openid]);
-            $this->updateAllCounters(['visit_count' => 1], 'wechat_openid = :openid', [':openid' => $openid]);
-            WwwInfo::setLoginInfo($user['user_id'], $user['wechat_nickname']);//存入登录信息
+            $this->updateAll(['last_ip' => ip2long(Yii::$app->request->userIP), 'last_login_time' => time()], 'phone = :phone', [':phone' => $phone]);
+            $this->updateAllCounters(['visit_count' => 1], 'phone = :phone', [':phone' => $phone]);
+            WwwInfo::setLoginInfo($user['user_id'], $user['phone']);//存入登录信息
             return true;
         }
         return false;

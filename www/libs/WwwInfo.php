@@ -15,7 +15,7 @@ class WwwInfo
     }
 
 	/*保存登录信息*/
-    public static function setLoginInfo($user_id, $wechat_nickname)
+    public static function setLoginInfo($user_id, $phone)
     {
     	self::setMode();
         $lifetime = self::$lifetime;
@@ -24,7 +24,7 @@ class WwwInfo
 	        session_set_cookie_params($lifetime);
 	        $session['www'] = [
                 'user_id' => $user_id,
-	            'wechat_nickname' => $wechat_nickname,
+	            'phone' => $phone,
 	            'isLogin' => 1,
 	        ];
     	}
@@ -54,13 +54,13 @@ class WwwInfo
     }
 
     /*取出登录名*/
-    public static function getWechatNickname()
+    public static function getPhone()
     {
         self::setMode();
         if(self::$mode == 'seesion'){
             $session = Yii::$app->session;
-            if(isset($session['www']['wechat_nickname'])){
-                return urldecode($session['www']['wechat_nickname']);
+            if(isset($session['www']['phone'])){
+                return urldecode($session['www']['phone']);
             };
         }
         return "";

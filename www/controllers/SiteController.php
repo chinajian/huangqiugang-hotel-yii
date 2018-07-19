@@ -89,7 +89,6 @@ class SiteController extends Controller
     public function actionLogin()
     {
         if(Yii::$app->request->isPost){
-            return Tools::showRes(300, '登录失败');
             $post = Yii::$app->request->post();
             $phone = isset($post['account'])?$post['account']:"";
             $password = isset($post['password'])?md5($post['password']):"";
@@ -113,7 +112,7 @@ class SiteController extends Controller
             }
 
             $userModel = new User;
-            if($userModel->login($post)){
+            if($userModel->login($phone, $password)){
                 return Tools::showRes(200, '登录成功');
                 Yii::$app->end();
             }else{
@@ -288,6 +287,18 @@ class SiteController extends Controller
 
         if(!empty($activity['author'])){
             $activity['author'] = explode(" ", $activity['author']);
+        };
+
+        if(!empty($activity['content'])){
+            $tmp = explode("./uploads", $activity['content']);
+            if(count($tmp) > 1){
+                $activity['content'] = $tmp[0];
+                foreach($tmp as $k => $v){
+                    if($k){
+                        $activity['content'] .= SITE_ADMIN_URL."/uploads/".$v;
+                    }
+                }
+            }
         };
 
         // P($activity);
