@@ -16,10 +16,14 @@ use \Curl\Curl;
 class HotelController extends Controller
 {
 
-    header('Access-Control-Allow-Credentials:true');
-    header('Access-Control-Allow-Origin:http://m.ghchotel.com');
-    // header('Access-Control-Allow-Origin:http://10.9.87.104:3000');
-    header('Access-Control-Allow-Methods:POST,GET');
+    public function beforeAction($action)
+    {
+        header('Access-Control-Allow-Credentials:true');
+        header('Access-Control-Allow-Origin:http://m.ghchotel.com');
+        // header('Access-Control-Allow-Origin:http://10.9.87.104:3000');
+        header('Access-Control-Allow-Methods:POST,GET');
+        return true;
+    }
 
     private $url = 'http://m.api.ghchotel.com/index.php?r=/public/login-by-wechat';//微信登录的URL
     
