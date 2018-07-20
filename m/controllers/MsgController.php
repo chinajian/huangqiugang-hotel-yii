@@ -81,7 +81,7 @@ class MsgController extends Controller
                         'content' => $content,
                         'send_time' => time(),
                         'task_id' => (string)$curl->response->taskId,
-                        'overage' => $curl->response->overage,
+                        'overage' => (string)$curl->response->overage,
                         'mobile_count' => $curl->response->mobileCount,
                         'status' => (string)$curl->response->status,
                         'desc' => $curl->response->desc,
