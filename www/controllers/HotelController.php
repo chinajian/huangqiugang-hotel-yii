@@ -112,15 +112,17 @@ class HotelController extends Controller
 
     /*
     2.3-查询房价房量(配备本地数据库的数据，完善房间信息)
+    $avail   定多少间房
     $self   0-外部请求 1-自身控制调用
     */
-    public function actionQueryHotelList($date = '', $dayCount = 1, $self = 0)
+    public function actionQueryHotelList($date = '', $dayCount = 1, $avail = 1, $self = 0)
     {
         $actionName = $this->action->id;//方法名
-        if(Yii::$app->request->isPost){
-            $post = Yii::$app->request->post();
-            $date = isset($post['date'])?$post['date']:'';
-            $dayCount = isset($post['dayCount'])?$post['dayCount']:1;
+        if($date == ''){
+            $get = Yii::$app->request->get();
+            $date = isset($get['date'])?$get['date']:'';
+            $dayCount = isset($get['dayCount'])?$get['dayCount']:1;
+            $avail = isset($get['avail'])?$get['avail']:1;
         };
         if(empty($date)){
             $date = date('Y-m-d', time());//到店日期
@@ -175,6 +177,11 @@ class HotelController extends Controller
                         };
                         $roomList[$k]->info["album_img"] = $album_img_arr;
                     }
+
+                    /*根据avail，删选出合格的数据*/
+                    if($roomList[$k]->avail < $avail){
+                        unset($roomList[$k]);
+                    }
                 }
             };
             // P($roomList);
@@ -185,15 +192,15 @@ class HotelController extends Controller
                     return Tools::showRes(0, $roomList);
                 }
             }else{
-                /*取出所有房型*/
-                $rmtypeList = $this->actionRoomList()->result;
                 // P($roomList);
 
                 return $this->renderFile('./pc-view/dist/order.html.php', [
                     "roomList" => $roomList,
                     "date" => $date,
                     'actionName' => $actionName,
-                    'rmtypeList' => $rmtypeList
+                    'date' => $date,
+                    'dayCount' => $dayCount,
+                    'avail' => $avail
                 ]);
             }
         }
@@ -221,7 +228,7 @@ class HotelController extends Controller
             return Tools::showRes(10300, '参数有误！');
             Yii::$app->end();
         };
-        $res = json_decode($this->actionQueryHotelList($date, $dayCount, 1));
+        $res = json_decode($this->actionQueryHotelList($date, $dayCount, 1, 1));
         if($res->code == 0){
             $roomList = $res->msg;
         }else{
