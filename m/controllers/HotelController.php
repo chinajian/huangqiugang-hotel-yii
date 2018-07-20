@@ -129,7 +129,7 @@ class HotelController extends Controller
             $post = Yii::$app->request->post();
             $date = isset($post['date'])?$post['date']:'';
             $dayCount = isset($post['dayCount'])?$post['dayCount']:1;
-            $avail = isset($get['avail'])?$get['avail']:1;
+            $avail = isset($post['avail'])?$post['avail']:1;
         };
         if(empty($date)){
             $date = date('Y-m-d', time());//到店日期
