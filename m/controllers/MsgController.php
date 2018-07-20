@@ -14,7 +14,7 @@ class MsgController extends Controller
     private $url = 'http://api.chanzor.com';
     private $account = '98acfa';
     private $password = '3tvnwyr5dk';
-    private $tpl = '您的短信验证码是{code}如非本人操作，请忽略此短信。本短信免费。【畅卓科技】';
+    private $tpl = '您的短信验证码是{code}如非本人操作，请忽略此短信。本短信免费。【环球港邮轮酒店】';
 
     public function beforeAction($action)
     {
