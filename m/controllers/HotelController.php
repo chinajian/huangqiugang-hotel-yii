@@ -4,7 +4,7 @@ namespace m\controllers;
 
 use Yii;
 use yii\helpers\Html;
-use m\controllers\BasicController;
+use yii\web\Controller;
 use app\models\User;
 use app\models\Room;
 use app\models\OrderInfo;
@@ -13,8 +13,17 @@ use libs\Tools;
 use \Curl\Curl;
 
 
-class HotelController extends BasicController
+class HotelController extends Controller
 {
+
+    header('Access-Control-Allow-Credentials:true');
+    header('Access-Control-Allow-Origin:http://m.ghchotel.com');
+    // header('Access-Control-Allow-Origin:http://10.9.87.104:3000');
+    header('Access-Control-Allow-Methods:POST,GET');
+
+    private $url = 'http://m.api.ghchotel.com/index.php?r=/public/login-by-wechat';//微信登录的URL
+    
+
     private $appKey = '10003';
     private $appSecret = '8b3d727f1ba1cde61cef63143ebab5e5';
     private $hotelGroupCode = 'GCBZG';
@@ -219,6 +228,13 @@ class HotelController extends BasicController
     /*2.7-创建订单*/
     private function actionBook($post)
     {
+        /*验证登录*/
+        if(!MInfo::getIsLogin()){
+            $url = $this->url;
+            echo Tools::showRes(10405, '请登录系统'.MInfo::getIsLogin(), $url);
+            Yii::$app->end();
+        }
+
         $param = array(
             'appKey' => $this->appKey,
             'sessionId' => $this->sessionid,
@@ -265,6 +281,13 @@ class HotelController extends BasicController
     /*创建订单(先本地创建，然后调取接口)*/
     public function actionAddOrder()
     {
+        /*验证登录*/
+        if(!MInfo::getIsLogin()){
+            $url = $this->url;
+            echo Tools::showRes(10405, '请登录系统'.MInfo::getIsLogin(), $url);
+            Yii::$app->end();
+        }
+
         /*插入订单*/
         if(Yii::$app->request->isPost){
         // if(1){
