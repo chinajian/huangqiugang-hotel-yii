@@ -193,13 +193,6 @@ class HotelController extends Controller
     public function actionRoom($ratecode = '', $rmtype = '', $date = '', $dayCount = 1)
     {
 
-        /*验证登录*/
-        if(!MInfo::getIsLogin()){
-            $url = $this->url;
-            echo Tools::showRes(10405, '请登录系统'.MInfo::getIsLogin(), $url);
-            Yii::$app->end();
-        }
-        
         if(Yii::$app->request->isPost){
             $post = Yii::$app->request->post();
         };
