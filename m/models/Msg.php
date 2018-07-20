@@ -21,7 +21,7 @@ class Msg extends \yii\db\ActiveRecord
             ['code', 'string', 'max' => 8],
             ['content', 'string', 'max' => 64],
             ['task_id', 'string', 'max' => 32],
-            ['overage', 'integer', 'message' => '当前账户余额格式不正确'],
+            ['overage', 'string', 'max' => 32],
             ['mobile_count', 'integer', 'message' => '成功发送条数格式不正确'],
             ['status', 'string', 'max' => 16],
             ['desc', 'string', 'max' => 64],
