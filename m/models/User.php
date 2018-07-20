@@ -108,7 +108,7 @@ class User extends \yii\db\ActiveRecord
         $user = self::find()->where(['wechat_openid' => $openid])->one();
         // P($user);
         if(empty($user) && (isset($data['User']['regby']) && $data['User']['regby'] == 3)){//没有找到此会员，先存入session，等到绑定手机的时候，一起添加到数据库
-            MInfo::setLoginInfo($user_id, $data['User']);//存入登录信息
+            MInfo::setLoginInfo("", $data['User']);//存入登录信息
             /*新增会员*/
             // if($this->addUser($data)){
             //     return true;

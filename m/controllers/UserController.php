@@ -19,6 +19,10 @@ class UserController extends BasicController
     public function actionUser()
     {
         $user_id = MInfo::getUserid();
+        if(empty($user_id)){
+            $user['wechat_nickname'] = MInfo::getWechatNickname();
+            return Tools::showRes(0, $user);
+        }
 
         /*如果有数据，进行修改*/
         if(Yii::$app->request->isPost){
