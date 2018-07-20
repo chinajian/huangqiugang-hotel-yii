@@ -42,11 +42,20 @@ class User extends \yii\db\ActiveRecord
     public function addUser($data)
     {
         // P($data);
+        $newData['User']['wechat_openid'] = MInfo::getWechatInfo()["wechat_openid"];
+        $newData['User']['wechat_nickname'] = MInfo::getWechatInfo()["wechat_nickname"];
+        $newData['User']['wechat_headimgurl'] = MInfo::getWechatInfo()["wechat_headimgurl"];
+        $newData['User']['wechat_sex'] = MInfo::getWechatInfo()["wechat_sex"];
+        $newData['User']['wechat_country'] = MInfo::getWechatInfo()["wechat_country"];
+        $newData['User']['wechat_province'] = MInfo::getWechatInfo()["wechat_province"];
+        $newData['User']['wechat_city'] = MInfo::getWechatInfo()["wechat_city"];
+        $newData['User']['regby'] = 3;//3-通过微信注册
+        $newData['User']['reg_time'] = time();
         $this->scenario = 'add';
-        if($this->load($data) and $this->validate()){
+        if($this->load($newData) and $this->validate()){
             if($this->save(false)){
                 $user_id = $this->getPrimaryKey();
-                MInfo::setLoginInfo($user_id, $data['User']['wechat_nickname']);//存入登录信息
+                MInfo::setLoginInfo($user_id, $newData['User']);//存入登录信息
                 return true;
             }
         }
@@ -98,16 +107,17 @@ class User extends \yii\db\ActiveRecord
         $openid = $data['User']['wechat_openid'];
         $user = self::find()->where(['wechat_openid' => $openid])->one();
         // P($user);
-        if(empty($user) && (isset($data['User']['regby']) && $data['User']['regby'] == 3)){//没有找到此会员，并且是微信过来的，需要增加一个会员
+        if(empty($user) && (isset($data['User']['regby']) && $data['User']['regby'] == 3)){//没有找到此会员，先存入session，等到绑定手机的时候，一起添加到数据库
+            MInfo::setLoginInfo($user_id, $data['User']);//存入登录信息
             /*新增会员*/
-            if($this->addUser($data)){
-                return true;
-            }
+            // if($this->addUser($data)){
+            //     return true;
+            // }
         }else{
             /*更新最后登录时间 和 登录次数*/
             $this->updateAll(['last_ip' => ip2long(Yii::$app->request->userIP), 'last_login_time' => time()], 'wechat_openid = :openid', [':openid' => $openid]);
             $this->updateAllCounters(['visit_count' => 1], 'wechat_openid = :openid', [':openid' => $openid]);
-            MInfo::setLoginInfo($user['user_id'], $user['wechat_nickname']);//存入登录信息
+            MInfo::setLoginInfo($user->user_id, $data['User']);//存入登录信息
             return true;
         }
         return false;

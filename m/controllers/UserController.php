@@ -52,7 +52,7 @@ class UserController extends BasicController
     /*微信账号 绑定 手机号*/
     public function actionBinding()
     {
-        $user_id = MInfo::getUserid();
+        // $user_id = MInfo::getUserid();
         if(Yii::$app->request->isPost){
         // if(1){
             $post = Yii::$app->request->post();
@@ -90,7 +90,8 @@ class UserController extends BasicController
             $transaction = Yii::$app->db->beginTransaction();//事物处理
             try{
                 /*绑定会员*/
-                if(!$userModel->modUser($post, $user_id, 'binding')){
+                // if(!$userModel->modUser($post, $user_id, 'binding')){
+                if(!$userModel->addUser($post)){
                     if($userModel->hasErrors()){
                         return Tools::showRes(10100, $userModel->getErrors());
                     }else{

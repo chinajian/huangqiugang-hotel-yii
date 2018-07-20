@@ -15,18 +15,25 @@ class MInfo
     }
 
 	/*保存登录信息*/
-    public static function setLoginInfo($user_id, $wechat_nickname)
+    public static function setLoginInfo($user_id = "", $wechatInfo = "")
     {
     	self::setMode();
         $lifetime = self::$lifetime;
     	if(self::$mode == 'seesion'){
 	        $session = Yii::$app->session;
 	        session_set_cookie_params($lifetime);
-	        $session['m'] = [
-                'user_id' => $user_id,
-	            'wechat_nickname' => $wechat_nickname,
-	            'isLogin' => 1,
-	        ];
+            if(!empty($user_id)){
+    	        $session['m'] = [
+                    'user_id' => $user_id,
+    	            'isLogin' => 1,
+    	        ];
+            };
+            if(!empty($wechatInfo)){
+                $session['m'] = [
+                    'wechatInfo' => $wechatInfo,
+                    'isLogin' => 1,
+                ];
+            };
     	}
     }
 
@@ -53,14 +60,27 @@ class MInfo
         return "";
     }
 
+    /*取出所有微信授权信息*/
+    public static function getWechatInfo()
+    {
+        self::setMode();
+        if(self::$mode == 'seesion'){
+            $session = Yii::$app->session;
+            if(isset($session['m']["wechatInfo"])){
+                return urldecode($session['m']["wechatInfo"]);
+            };
+        }
+        return "";
+    }
+
     /*取出登录名*/
     public static function getWechatNickname()
     {
         self::setMode();
         if(self::$mode == 'seesion'){
             $session = Yii::$app->session;
-            if(isset($session['m']['wechat_nickname'])){
-                return urldecode($session['m']['wechat_nickname']);
+            if(isset($session['m']["wechatInfo"]['wechat_nickname'])){
+                return urldecode($session['m']["wechatInfo"]['wechat_nickname']);
             };
         }
         return "";

@@ -123,12 +123,13 @@ class HotelController extends Controller
     }
 
     /*2.3-查询房价房量(配备本地数据库的数据，完善房间信息)*/
-    public function actionQueryHotelList($date = '', $dayCount = 1)
+    public function actionQueryHotelList($date = '', $dayCount = 1, $avail = 1)
     {
-        if(Yii::$app->request->isPost){
+        if($date == ''){
             $post = Yii::$app->request->post();
             $date = isset($post['date'])?$post['date']:'';
             $dayCount = isset($post['dayCount'])?$post['dayCount']:1;
+            $avail = isset($get['avail'])?$get['avail']:1;
         };
         if(empty($date)){
             $date = date('Y-m-d', time());//到店日期

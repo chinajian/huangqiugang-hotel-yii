@@ -207,28 +207,28 @@ class HotelController extends Controller
     }
 
     /*调取actionQueryHotelList接口，然后匹配出房间详情*/
-    public function actionRoom($ratecode = '', $rmtype = '', $date = '', $dayCount = 1)
+    public function actionRoom($ratecode = '', $rmtype = '', $date = '', $dayCount = 1, $avail = 1)
     {
-        if(Yii::$app->request->isPost){
-            $post = Yii::$app->request->post();
+        if($ratecode == ""){
+            $get = Yii::$app->request->get();
         };
         $ratecode = $this->ratecode;
         // P($ratecode);
         if(empty($ratecode)){
-            $ratecode = (isset($post['ratecode'])?$post['ratecode']:"");
+            $ratecode = (isset($get['ratecode'])?$get['ratecode']:"");
         };
         if(empty($rmtype)){
-            $rmtype = (isset($post['rmtype'])?$post['rmtype']:"");
+            $rmtype = (isset($get['rmtype'])?$get['rmtype']:"");
         };
         if(empty($date)){
-            $date = (isset($post['date'])?$post['date']:date('Y-m-d', time()));
+            $date = (isset($get['date'])?$get['date']:date('Y-m-d', time()));
         };
-        // P($date . '-' . $dayCount);
+        // P($date . '-' . $dayCount . '-' . $avail);
         if(empty($ratecode) or empty($rmtype) or empty($date)){
             return Tools::showRes(10300, '参数有误！');
             Yii::$app->end();
         };
-        $res = json_decode($this->actionQueryHotelList($date, $dayCount, 1, 1));
+        $res = json_decode($this->actionQueryHotelList($date, $dayCount, $avail, 1));
         if($res->code == 0){
             $roomList = $res->msg;
         }else{
@@ -244,7 +244,12 @@ class HotelController extends Controller
                 }
             }
         }
+
         // P($room);
+        if(empty($room)){
+            $this->redirect(array('/hotel/query-hotel-list'));
+        }
+        
         return $this->renderFile('./pc-view/dist/order_detail.html.php', [
             'room' => $room,
             'date' => $date,
