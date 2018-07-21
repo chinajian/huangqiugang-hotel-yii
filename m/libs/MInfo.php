@@ -22,13 +22,11 @@ class MInfo
     	if(self::$mode == 'seesion'){
 	        $session = Yii::$app->session;
 	        session_set_cookie_params($lifetime);
-            $session['m']['isLogin'] = 1;
-            if(!empty($user_id)){
-                $session['m']['user_id'] = $user_id;
-            };
-            if(!empty($wechatInfo)){
-                $session['m']['wechatInfo'] = $wechatInfo;
-            };
+	        $session['m'] = [
+                'user_id' => $user_id,
+                'wechatInfo' => $wechatInfo,
+                'isLogin' => 1,
+            ];
     	}
     }
 
