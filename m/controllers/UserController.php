@@ -54,7 +54,10 @@ class UserController extends BasicController
         return Tools::showRes(0, $user);
     }
 
-    /*微信账号 绑定 手机号*/
+    /*
+    微信账号  手机号 一起添加到库中
+    先 根据 手机号 查看是否有记录，如果有记录，说明是在PC上注册过的，只要把微信信息插入进去就行了
+    */
     public function actionBinding()
     {
         // $user_id = MInfo::getUserid();
