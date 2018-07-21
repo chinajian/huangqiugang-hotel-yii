@@ -84,7 +84,7 @@ class PublicController extends Controller
                 $data['User']['wechat_city'] = isset($userinfo['city'])?$userinfo['city']:'';
                 // $data['User']['regby'] = 3;//3-通过微信注册
                 // $data['User']['reg_time'] = time();
-                P($data['User']);
+                // P($data['User']);
     			if($userModel->login($data)){
     				$this->redirect($get['state']);
     			}
