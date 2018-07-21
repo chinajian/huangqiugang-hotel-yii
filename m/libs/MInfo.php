@@ -54,7 +54,7 @@ class MInfo
     	if(self::$mode == 'seesion'){
 	    	$session = Yii::$app->session;
 	    	if(isset($session['m']['user_id'])){
-	            return urldecode($session['m']['user_id']);
+	            return $session['m']['user_id'];
 	        };
     	}
         return "";
@@ -67,7 +67,7 @@ class MInfo
         if(self::$mode == 'seesion'){
             $session = Yii::$app->session;
             if(isset($session['m']["wechatInfo"])){
-                return urldecode($session['m']["wechatInfo"]);
+                return $session['m']["wechatInfo"];
             };
         }
         return "";
