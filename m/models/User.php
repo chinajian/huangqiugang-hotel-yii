@@ -42,6 +42,8 @@ class User extends \yii\db\ActiveRecord
     public function addUser($data)
     {
         // P($data);
+        $newData['User']['phone'] = MInfo::getWechatInfo()["phone"];
+        $newData['User']['password'] = md5(MInfo::getWechatInfo()["password"]);
         $newData['User']['wechat_openid'] = MInfo::getWechatInfo()["wechat_openid"];
         $newData['User']['wechat_nickname'] = urldecode(MInfo::getWechatInfo()["wechat_nickname"]);
         $newData['User']['wechat_headimgurl'] = MInfo::getWechatInfo()["wechat_headimgurl"];
