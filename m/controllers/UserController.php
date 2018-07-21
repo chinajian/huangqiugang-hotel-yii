@@ -22,7 +22,7 @@ class UserController extends BasicController
         if(empty($user_id)){
             $user['wechat_nickname'] = MInfo::getWechatNickname();
             $session = Yii::$app->session;
-            return Tools::showRes(0, $session);
+            return Tools::showRes(0, $session['m']);
         }
 
         /*如果有数据，进行修改*/
