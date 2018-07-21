@@ -111,6 +111,7 @@ class User extends \yii\db\ActiveRecord
         // P($user);
         if(empty($user) && (isset($data['User']['regby']) && $data['User']['regby'] == 3)){//没有找到此会员，先存入session，等到绑定手机的时候，一起添加到数据库
             MInfo::setLoginInfo("", $data['User']);//存入登录信息
+            return true;
             /*新增会员*/
             // if($this->addUser($data)){
             //     return true;
