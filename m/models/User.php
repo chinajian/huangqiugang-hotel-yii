@@ -120,14 +120,14 @@ class User extends \yii\db\ActiveRecord
             $this->updateAll(['last_ip' => ip2long(Yii::$app->request->userIP), 'last_login_time' => time()], 'wechat_openid = :openid', [':openid' => $openid]);
             $this->updateAllCounters(['visit_count' => 1], 'wechat_openid = :openid', [':openid' => $openid]);
 
-            $wechatInfo['phone'] = $user["phone"];
-            $wechatInfo['wechat_openid'] = $user["wechat_openid"];
-            $wechatInfo['wechat_nickname'] = $user["wechat_nickname"];
-            $wechatInfo['wechat_headimgurl'] = $user["wechat_headimgurl"];
-            $wechatInfo['wechat_sex'] = $user["wechat_sex"];
-            $wechatInfo['wechat_country'] = $user["wechat_country"];
-            $wechatInfo['wechat_province'] = $user["wechat_province"];
-            $wechatInfo['wechat_city'] = $user["wechat_city"];
+            $wechatInfo['phone'] = $user->phone;
+            $wechatInfo['wechat_openid'] = $user->wechat_openid;
+            $wechatInfo['wechat_nickname'] = $user->wechat_nickname;
+            $wechatInfo['wechat_headimgurl'] = $user->wechat_headimgurl;
+            $wechatInfo['wechat_sex'] = $user->wechat_sex;
+            $wechatInfo['wechat_country'] = $user->wechat_country;
+            $wechatInfo['wechat_province'] = $user->wechat_province;
+            $wechatInfo['wechat_city'] = $user->wechat_city;
             MInfo::setLoginInfo($user->user_id, $wechatInfo);//存入登录信息
             return true;
         }
