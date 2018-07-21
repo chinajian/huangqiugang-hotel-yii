@@ -119,7 +119,7 @@ class User extends \yii\db\ActiveRecord
             /*更新最后登录时间 和 登录次数*/
             $this->updateAll(['last_ip' => ip2long(Yii::$app->request->userIP), 'last_login_time' => time()], 'wechat_openid = :openid', [':openid' => $openid]);
             $this->updateAllCounters(['visit_count' => 1], 'wechat_openid = :openid', [':openid' => $openid]);
-            MInfo::setLoginInfo($user->user_id);//存入登录信息
+            MInfo::setLoginInfo($user->user_id, $user);//存入登录信息
             return true;
         }
         return false;
